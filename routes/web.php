@@ -19,3 +19,13 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+
+
+// -----------------------------------------------------------------------------------------------
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('tasks')->as('tasks.')->group(function () {
+        Route::get('/', [TaskController::class, 'index'])->name('index');
+    });
+});
