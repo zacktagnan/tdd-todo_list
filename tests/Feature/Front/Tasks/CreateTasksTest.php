@@ -44,3 +44,13 @@ test('users can create tasks', function () {
             'completed' => false,
         ]);
 })->group('tasks', 'tasks_create');
+
+test('validation works on create task', function () {
+    $this
+        ->actingAs(User::factory()->create())
+        ->post(route('tasks.store'), [
+            'title' => '',
+            'description' => '',
+        ])
+        ->assertSessionHasErrors(['title', 'description']);
+})->group('tasks', 'tasks_create');

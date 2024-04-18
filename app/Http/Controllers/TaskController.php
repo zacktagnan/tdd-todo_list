@@ -27,11 +27,15 @@ class TaskController extends Controller
 
     public function store(): RedirectResponse
     {
+        $data = request()->validate([
+            'title' => 'required|unique:tasks|max:255',
+            'description' => 'required',
+        ]);
         /** @var \App\Models\User $authUser **/
         $authUser = auth()->user();
         $authUser->tasks()->create([
-            'title' => request('title'),
-            'description' => request('description'),
+            'title' => data_get($data, 'title'),
+            'description' => data_get($data, 'description'),
             'completed' => request()->has('completed'),
         ]);
 
