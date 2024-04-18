@@ -38,6 +38,6 @@ class TaskController extends Controller
         ]);
 
         session()->flash('status', 'Tarea creada satisfactoriamente.');
-        // return redirect()->route('tasks.index');
+        return redirect()->route('tasks.index');
     }
 }
