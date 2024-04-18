@@ -23,3 +23,24 @@ test('users can render the create tasks form', function () {
     //     ->assertSee('Crear');
     $response->assertViewIs('tasks.create');
 })->group('tasks', 'tasks_create');
+
+test('users can create tasks', function () {
+    $timestamp = time();
+
+    $this
+        ->actingAs(User::factory()->create())
+        ->post(route('tasks.store'), [
+            'title' => 'Tarea ' . $timestamp,
+            'description' => 'Descripción ' . $timestamp,
+        ])
+        ->assertSessionHas('status', 'Tarea creada satisfactoriamente.')
+        ->assertRedirect(route('tasks.index'));
+
+    $this
+        ->assertDatabaseHas('tasks', [
+            'user_id' => auth()->id(),
+            'title' => 'Tarea ' . $timestamp,
+            'description' => 'Descripción ' . $timestamp,
+            'completed' => false,
+        ]);
+})->group('tasks', 'tasks_create');
