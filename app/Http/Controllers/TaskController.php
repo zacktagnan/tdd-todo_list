@@ -20,4 +20,9 @@ class TaskController extends Controller
         $tasks = $authUser->tasks()->paginate(5);
         return view('tasks.index', compact('tasks'));
     }
+
+    public function create(): View
+    {
+        return view('tasks.create');
+    }
 }
