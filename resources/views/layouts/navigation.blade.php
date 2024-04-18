@@ -16,7 +16,7 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     <x-nav-link :href="route('tasks.index')" :active="request()->routeIs('tasks.*')">
-                        {{ __('tasks/general.section_label') }}
+                        {{ __('tasks/index.general_label') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -74,7 +74,7 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('tasks.index')" :active="request()->routeIs('tasks.*')">
-                {{ __('tasks/general.section_label') }}
+                {{ __('tasks/index.general_label') }}
             </x-responsive-nav-link>
         </div>
 
