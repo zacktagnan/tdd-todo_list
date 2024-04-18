@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -41,5 +42,10 @@ class TaskController extends Controller
 
         session()->flash('status', 'Tarea creada satisfactoriamente.');
         return redirect()->route('tasks.index');
+    }
+
+    public function edit(Task $task): View
+    {
+        return view('tasks.edit', compact('task'));
     }
 }
