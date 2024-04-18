@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
-            $table->string('name')->unique();
+            $table->string('title')->unique();
             $table->text('description');
             $table->boolean('completed')->default(false);
             $table->timestamps();
