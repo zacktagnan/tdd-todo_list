@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+
+/* == Elemento TOGGLE - ini ================= */
+
 .switch {
     position: relative;
     display: inline-block;
@@ -61,3 +64,5 @@ input:checked+.slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+/* == Elemento TOGGLE - fin ================= */

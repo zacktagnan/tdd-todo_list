@@ -6,7 +6,7 @@ test('guests cannot see tasks', function () {
     $this
         ->get(route('tasks.index'))
         ->assertRedirect(route('login'));
-})->group('list_tasks');
+})->group('tasks', 'tasks_list');
 
 test('users can render the tasks list', function () {
     $response = $this
@@ -21,4 +21,4 @@ test('users can render the tasks list', function () {
     // -> No vale texto dentro de atributos o de métodos extra, ni claves
     // ->assertSeeText('Mis Tareas');
     // ->assertSeeText('tasks/index.section_label');
-})->group('list_tasks');
+})->group('tasks', 'tasks_list');

@@ -33,14 +33,15 @@
                             <div class="w-full border rounded-lg shadow border-cyan-700 shadow-cyan-500">
                                 <div class="px-4 py-2.5 bg-sky-100 rounded-none rounded-t-lg">
                                     <div class="flex items-center justify-between">
-                                        {{-- <h3>Mis Tareas</h3> --}}
-                                        {{-- <h3>{{ __('Mis Tareas') }}</h3> --}}
                                         <h4 class="text-base font-medium leading-none">Título de la tarea</h4>
 
-                                        <label class="switch">
-                                            <input type="checkbox" checked>
-                                            <span class="slider round"></span>
-                                        </label>
+                                        <div class="flex items-center">
+                                            <span class="mr-2">Completada:</span>
+                                            <label class="switch">
+                                                <input type="checkbox" checked>
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
 
