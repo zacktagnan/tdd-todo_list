@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class TaskController extends Controller
@@ -27,7 +25,7 @@ class TaskController extends Controller
         return view('tasks.create');
     }
 
-    public function store() //: RedirectResponse
+    public function store(): RedirectResponse
     {
         /** @var \App\Models\User $authUser **/
         $authUser = auth()->user();
