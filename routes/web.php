@@ -24,15 +24,4 @@ require __DIR__ . '/auth.php';
 // -----------------------------------------------------------------------------------------------
 
 
-// Route::middleware(['auth'])->group(function () {
-//     Route::prefix('tasks')->as('tasks.')->group(function () {
-//         Route::get('/', [TaskController::class, 'index'])->name('index');
-//         Route::get('/create', [TaskController::class, 'create'])->name('create');
-//         Route::post('/', [TaskController::class, 'store'])->name('store');
-//         Route::get('/{task}/edit', [TaskController::class, 'edit'])->name('edit');
-//         Route::put('/{task}', [TaskController::class, 'update'])->name('update');
-//         Route::delete('/{task}', [TaskController::class, 'destroy'])->name('destroy');
-//     });
-// });
-
 Route::resource('tasks', TaskController::class)->middleware('auth');
