@@ -26,23 +26,26 @@ test('users can render the create tasks form', function () {
 
 test('users can create tasks', function () {
     $timestamp = time();
+    $taskStored = [
+        'title' => 'Tarea ' . $timestamp,
+        'description' => 'Descripción ' . $timestamp,
+    ];
 
     $this
         ->actingAs(User::factory()->create())
         ->post(route('tasks.store'), [
-            'title' => 'Tarea ' . $timestamp,
-            'description' => 'Descripción ' . $timestamp,
+            'title' => $taskStored['title'],
+            'description' => $taskStored['description'],
         ])
         ->assertSessionHas('status', 'Tarea creada satisfactoriamente.')
         ->assertRedirect(route('tasks.index'));
 
-    $this
-        ->assertDatabaseHas('tasks', [
-            'user_id' => auth()->id(),
-            'title' => 'Tarea ' . $timestamp,
-            'description' => 'Descripción ' . $timestamp,
-            'completed' => false,
-        ]);
+    $this->assertDatabaseHas('tasks', [
+        'user_id' => auth()->id(),
+        'title' => $taskStored['title'],
+        'description' => $taskStored['description'],
+        'completed' => false,
+    ]);
 })->group('tasks', 'tasks_create');
 
 test('validation works on create task', function () {
