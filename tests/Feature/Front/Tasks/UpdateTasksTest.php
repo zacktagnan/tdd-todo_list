@@ -27,3 +27,35 @@ test('users can render the edit tasks form', function () {
         ->assertViewIs('tasks.edit')
         ->assertViewHas('task');
 })->group('tasks', 'tasks_update');
+
+test('users can update a task', function () {
+    $timestamp = time();
+    $user = User::factory()->create();
+    $task = $user->tasks()->create([
+        'title' => 'El Título de la Tarea ' . $timestamp,
+        'description' => 'La Descripción de la Tarea ' . $timestamp,
+        'completed' => false,
+    ]);
+    $taskUpdated = [
+        'title' => 'Tarea actualizada ' . $timestamp,
+        'description' => 'Descripción actualizada ' . $timestamp,
+        'completed' => true,
+    ];
+
+    $this
+        ->actingAs($user)
+        ->put(route('tasks.update', $task), [
+            'title' => $taskUpdated['title'],
+            'description' => $taskUpdated['description'],
+            'completed' => $taskUpdated['completed'],
+        ])
+        ->assertSessionHas('status', 'Tarea actualizada satisfactoriamente.')
+        ->assertRedirect(route('tasks.index'));
+
+    $this->assertDatabaseHas('tasks', [
+        'user_id' => $user->id,
+        'title' => $taskUpdated['title'],
+        'description' => $taskUpdated['description'],
+        'completed' => $taskUpdated['completed'],
+    ]);
+})->group('tasks', 'tasks_update');

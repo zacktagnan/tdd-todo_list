@@ -48,4 +48,16 @@ class TaskController extends Controller
     {
         return view('tasks.edit', compact('task'));
     }
+
+    public function update(Task $task): RedirectResponse
+    {
+        $task->update([
+            'title' => request('title'),
+            'description' => request('description'),
+            'completed' => request()->has('completed'),
+        ]);
+
+        session()->flash('status', 'Tarea actualizada satisfactoriamente.');
+        return redirect()->route('tasks.index');
+    }
 }
