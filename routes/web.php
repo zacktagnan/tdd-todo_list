@@ -24,4 +24,4 @@ require __DIR__ . '/auth.php';
 // -----------------------------------------------------------------------------------------------
 
 
-Route::resource('tasks', TaskController::class)->middleware('auth');
+Route::resource('tasks', TaskController::class)->middleware('auth')->except(['show']);
