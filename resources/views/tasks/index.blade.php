@@ -23,53 +23,65 @@
                             </div>
                         </div>
 
-                        <div class="p-4">
-                            <div class="w-full p-4 mb-4 border rounded-lg shadow border-cyan-700 shadow-cyan-500">
-                                Tarea actualizada con éxito
-                            </div>
-                            <x-flash-messages :sessionType="'success'" :color="'green'" :title="'¡¡Éxito!!'" />
+                        <div class="px-4">
+                            @if (session()->has('status'))
+                                {{-- <x-flash-messages :sessionType="'success'" :color="'green'" :title="'¡¡Éxito!!'" /> --}}
+                                <x-flash-messages />
+                            @endif
 
-                            {{-- Cuadro de Tarea --}}
-                            <div class="w-full border rounded-lg shadow border-cyan-700 shadow-cyan-500">
-                                <div class="px-4 py-2.5 bg-sky-100 rounded-none rounded-t-lg">
-                                    <div class="flex items-center justify-between">
-                                        <h4 class="text-base font-medium leading-none">Título de la tarea</h4>
+                            @forelse ($tasks as $task)
 
-                                        <div class="flex items-center">
-                                            <span class="mr-2">{{ __('tasks/index.list.completed_label') }}:</span>
-                                            <label class="switch">
-                                                <input type="checkbox" checked>
-                                                <span class="slider round"></span>
-                                            </label>
+                                <div class="w-full mt-4 border rounded-lg shadow border-cyan-700 shadow-cyan-500">
+                                    <div class="px-4 py-2.5 bg-sky-100 rounded-none rounded-t-lg">
+                                        <div class="flex items-center justify-between">
+                                            <h4 class="text-base font-medium leading-none">{{ $task->title }}</h4>
+
+                                            <div class="flex items-center">
+                                                <span class="mr-2">{{ __('tasks/index.list.completed_label') }}:</span>
+                                                <label class="switch">
+                                                    <input type="checkbox" {{ $task->completed ? 'checked' : '' }}>
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="p-4">
-                                    <div class="w-full p-4 border rounded-lg shadow border-cyan-700 shadow-cyan-500">
-                                        Descripción de la tarea
+                                    <div class="p-4">
+                                        <div class="w-full p-4 border rounded-lg shadow border-cyan-700 shadow-cyan-500">
+                                            {{ $task->description }}
+                                        </div>
+                                    </div>
+
+                                    <div class="px-4 py-2.5 flex rounded-none rounded-b-lg justify-evenly bg-sky-100">
+                                        <a href="#" class="px-4 py-2 font-bold text-white bg-green-700 rounded hover:bg-green-500" title="{{ __('tasks/index.button.mark_as_completed') }}">
+                                            {{ __('tasks/index.button.mark_as_completed') }}
+                                        </a>
+
+                                        <a href="{{ route('tasks.edit', $task) }}" class="px-4 py-2 font-bold text-white bg-gray-700 rounded hover:bg-gray-500" title="{{ __('tasks/index.button.edit') }}">
+                                            {{ __('tasks/index.button.edit') }}
+                                        </a>
+
+                                        <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"class="px-4 py-2 font-bold text-white bg-red-700 rounded hover:bg-red-500" title="{{ __('tasks/index.button.delete') }}" onclick="return confirm('{{ __('¿En verdad se desea ELIMINAR este registro?') }}')">{{ __('tasks/index.button.delete') }}</button>
+                                        </form>
                                     </div>
                                 </div>
 
-                                <div class="px-4 py-2.5 flex rounded-none rounded-b-lg justify-evenly bg-sky-100">
-                                    <a href="#" class="px-4 py-2 font-bold text-white bg-green-700 rounded hover:bg-green-500" title="{{ __('tasks/index.button.mark_as_completed') }}">
-                                        {{ __('tasks/index.button.mark_as_completed') }}
-                                    </a>
-
-                                    <a href="#" class="px-4 py-2 font-bold text-white bg-gray-700 rounded hover:bg-gray-500" title="{{ __('tasks/index.button.edit') }}">
-                                        {{ __('tasks/index.button.edit') }}
-                                    </a>
-
-                                    <a href="#" class="px-4 py-2 font-bold text-white bg-red-700 rounded hover:bg-red-500" title="{{ __('tasks/index.button.delete') }}">
-                                        {{ __('tasks/index.button.delete') }}
-                                    </a>
+                            @empty
+                                <div class="w-full p-4 text-center text-white border rounded-lg shadow border-slate-700 shadow-slate-500 bg-slate-400">
+                                    :: <span class="italic">No hay tareas disponibles actualmente</span> ::
                                 </div>
-                            </div>
+                            @endforelse
 
 
                         </div>
 
-                        <div class="h-4 bg-blue-100 rounded-none rounded-b-lg"></div>
+                        {{-- <div class="h-4 mt-4 bg-blue-100 rounded-none rounded-b-lg"></div> --}}
+                        <div class="px-4 py-2 mt-4 bg-blue-100 rounded-none rounded-b-lg">
+                            {{ $tasks->links() }}
+                        </div>
                     </div>
 
                 </div>
