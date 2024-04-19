@@ -40,11 +40,11 @@ class TaskController extends Controller
             'completed' => request()->has('completed'),
         ]);
 
-        // session()->flash('status', 'Tarea creada satisfactoriamente.');
+        // session()->flash('status', 'Tarea CREADA satisfactoriamente.');
         session()->flash('status', [
             'type' => 'success',
             'title' => '¡¡Éxito!!',
-            'message' => 'Tarea creada satisfactoriamente.',
+            'message' => 'Tarea CREADA satisfactoriamente.',
         ]);
         return redirect()->route('tasks.index');
     }
@@ -70,7 +70,7 @@ class TaskController extends Controller
         session()->flash('status', [
             'type' => 'success',
             'title' => '¡¡Éxito!!',
-            'message' => 'Tarea actualizada satisfactoriamente.',
+            'message' => 'Tarea ACTUALIZADA satisfactoriamente.',
         ]);
         return redirect()->route('tasks.index');
     }
@@ -82,7 +82,7 @@ class TaskController extends Controller
         session()->flash('status', [
             'type' => 'success',
             'title' => '¡¡Éxito!!',
-            'message' => 'Tarea eliminada satisfactoriamente.',
+            'message' => 'Tarea ELIMINADA satisfactoriamente.',
         ]);
         return redirect()->route('tasks.index');
     }

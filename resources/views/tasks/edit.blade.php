@@ -9,7 +9,6 @@
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-
                     <div class="w-1/2 mx-auto border rounded-lg shadow border-cyan-700 shadow-cyan-500">
                         <form action="{{ route('tasks.update', $task) }}" method="POST">
                             @csrf
@@ -21,8 +20,6 @@
                             </div>
 
                             <div class="p-4">
-                                {{-- <x-flash-messages :sessionType="'success'" :color="'green'" :title="'¡¡Éxito!!'" /> --}}
-
                                 <div class="flex">
                                     <div class="w-full">
                                         <label for="title" class="block text-base font-bold text-gray-700 dark:text-white">
@@ -35,7 +32,7 @@
                                             class="block w-full p-4 mt-2 bg-white border rounded-lg shadow-md border-cyan-200 focus:outline-none focus:border-slate-300 focus:shadow-cyan-200 focus:ring-cyan-300 focus:ring-1"
                                         />
                                         @error('title')
-                                            <p class="text-xs italic text-red-500">{{ $message }}</p>
+                                            <p class="mt-0.5 text-sm italic text-red-500">{{ $message }}</p>
                                         @enderror
                                     </div>
 
@@ -62,7 +59,7 @@
                                     <textarea name="description" id="description"
                                         class="w-full p-4 mt-2 bg-white border rounded-lg shadow-md border-cyan-200 focus:outline-none focus:border-slate-300 focus:shadow-cyan-200 focus:ring-cyan-300 focus:ring-1">{{ old('description', $task->description) }}</textarea>
                                     @error('description')
-                                    <p class="text-xs italic text-red-500">{{ $message }}</p>
+                                    <p class="mt-0.5 text-sm italic text-red-500">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
@@ -82,7 +79,6 @@
                             </div>
                         </form>
                     </div>
-
                 </div>
             </div>
         </div>

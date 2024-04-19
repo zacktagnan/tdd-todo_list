@@ -52,7 +52,7 @@ test('users can update a task', function () {
         ->assertSessionHas('status', [
             'type' => 'success',
             'title' => '¡¡Éxito!!',
-            'message' => 'Tarea actualizada satisfactoriamente.',
+            'message' => 'Tarea ACTUALIZADA satisfactoriamente.',
         ])
         ->assertRedirect(route('tasks.index'));
 

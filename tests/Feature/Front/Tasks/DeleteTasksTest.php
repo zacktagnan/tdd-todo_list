@@ -26,7 +26,7 @@ test('users can delete tasks', function () {
         ->assertSessionHas('status', [
             'type' => 'success',
             'title' => '¡¡Éxito!!',
-            'message' => 'Tarea eliminada satisfactoriamente.',
+            'message' => 'Tarea ELIMINADA satisfactoriamente.',
         ])
         ->assertRedirect(route('tasks.index'));
 
