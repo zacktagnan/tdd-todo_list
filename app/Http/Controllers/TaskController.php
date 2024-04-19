@@ -65,4 +65,12 @@ class TaskController extends Controller
         session()->flash('status', 'Tarea actualizada satisfactoriamente.');
         return redirect()->route('tasks.index');
     }
+
+    public function destroy(Task $task): RedirectResponse
+    {
+        $task->delete();
+
+        session()->flash('status', 'Tarea eliminada satisfactoriamente.');
+        return redirect()->route('tasks.index');
+    }
 }
