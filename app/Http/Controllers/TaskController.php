@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TaskRequest;
 use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -26,19 +27,29 @@ class TaskController extends Controller
         return view('tasks.create');
     }
 
-    public function store(): RedirectResponse
+    public function store(TaskRequest $request): RedirectResponse
     {
-        $data = request()->validate([
-            'title' => 'required|unique:tasks|max:255',
-            'description' => 'required',
-        ]);
+        // $data = request()->validate([
+        //     'title' => 'required|unique:tasks|max:255',
+        //     'description' => 'required',
+        // ]);
+        // /** @var \App\Models\User $authUser **/
+        // $authUser = auth()->user();
+        // $authUser->tasks()->create([
+        //     'title' => data_get($data, 'title'),
+        //     'description' => data_get($data, 'description'),
+        //     'completed' => request()->has('completed'),
+        // ]);
+        // --------------------------------------------------------
         /** @var \App\Models\User $authUser **/
         $authUser = auth()->user();
-        $authUser->tasks()->create([
-            'title' => data_get($data, 'title'),
-            'description' => data_get($data, 'description'),
-            'completed' => request()->has('completed'),
-        ]);
+        $authUser->tasks()->create($request->all());
+        // o
+        // $authUser->tasks()->create([
+        //     'title' => $request->validated('title'),
+        //     'description' => $request->validated('description'),
+        //     'completed' => $request->has('completed'),
+        // ]);
 
         // session()->flash('status', 'Tarea CREADA satisfactoriamente.');
         session()->flash('status', [
@@ -54,18 +65,15 @@ class TaskController extends Controller
         return view('tasks.edit', compact('task'));
     }
 
-    public function update(Task $task): RedirectResponse
+    public function update(TaskRequest $request, Task $task): RedirectResponse
     {
-        request()->validate([
-            'title' => 'required|unique:tasks,title,' . $task->id . '|max:255',
-            'description' => 'required',
-        ]);
-
-        $task->update([
-            'title' => request('title'),
-            'description' => request('description'),
-            'completed' => request()->has('completed'),
-        ]);
+        $task->update($request->all());
+        // o
+        // $task->update([
+        //     'title' => $request->validated('title'),
+        //     'description' => $request->validated('description'),
+        //     'completed' => $request->has('completed'),
+        // ]);
 
         session()->flash('status', [
             'type' => 'success',
