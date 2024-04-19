@@ -51,6 +51,11 @@ class TaskController extends Controller
 
     public function update(Task $task): RedirectResponse
     {
+        request()->validate([
+            'title' => 'required|unique:tasks,title,' . $task->id . '|max:255',
+            'description' => 'required',
+        ]);
+
         $task->update([
             'title' => request('title'),
             'description' => request('description'),

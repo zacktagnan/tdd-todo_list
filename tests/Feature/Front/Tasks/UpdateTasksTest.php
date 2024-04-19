@@ -59,3 +59,27 @@ test('users can update a task', function () {
         'completed' => $taskUpdated['completed'],
     ]);
 })->group('tasks', 'tasks_update');
+
+test('validation works on update task', function () {
+    $timestamp = time();
+    $user = User::factory()->create();
+    $task = $user->tasks()->create([
+        'title' => 'El Título de la Tarea ' . $timestamp,
+        'description' => 'La Descripción de la Tarea ' . $timestamp,
+        'completed' => false,
+    ]);
+    $taskUpdated = [
+        'title' => 'Tarea actualizada ' . $timestamp,
+        'description' => 'Descripción actualizada ' . $timestamp,
+        'completed' => true,
+    ];
+
+    $this
+        ->actingAs($user)
+        ->put(route('tasks.update', $task), [
+            'title' => '',
+            'description' => '',
+            'completed' => $taskUpdated['completed'],
+        ])
+        ->assertSessionHasErrors(['title', 'description']);
+})->group('tasks', 'tasks_update');

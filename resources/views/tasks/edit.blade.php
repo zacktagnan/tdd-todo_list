@@ -80,7 +80,7 @@
                                     {{ __('tasks/index.button.delete') }}
                                 </a>
                             </div>
-                        {{-- </form> --}}
+                        </form>
                     </div>
 
                 </div>
