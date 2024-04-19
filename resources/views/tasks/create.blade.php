@@ -72,9 +72,9 @@
                                     {{ __('tasks/index.button.cancel') }}
                                 </a>
 
-                                <a href="#" class="px-4 py-2 font-bold text-white rounded ms-2 bg-cyan-700 hover:bg-cyan-500" title="{{ __('tasks/index.button.store') }}">
+                                <button type="submit" class="px-4 py-2 font-bold text-white rounded ms-2 bg-cyan-700 hover:bg-cyan-500" title="{{ __('tasks/index.button.store') }}">
                                     {{ __('tasks/index.button.store') }}
-                                </a>
+                                </button>
 
                                 <a href="#" class="px-4 py-2 font-bold text-white bg-red-700 rounded ms-2 hover:bg-red-500" title="{{ __('tasks/index.button.delete') }}">
                                     {{ __('tasks/index.button.delete') }}
