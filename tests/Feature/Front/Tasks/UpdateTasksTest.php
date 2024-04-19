@@ -49,7 +49,11 @@ test('users can update a task', function () {
             'description' => $taskUpdated['description'],
             'completed' => $taskUpdated['completed'],
         ])
-        ->assertSessionHas('status', 'Tarea actualizada satisfactoriamente.')
+        ->assertSessionHas('status', [
+            'type' => 'success',
+            'title' => '¡¡Éxito!!',
+            'message' => 'Tarea actualizada satisfactoriamente.',
+        ])
         ->assertRedirect(route('tasks.index'));
 
     $this->assertDatabaseHas('tasks', [

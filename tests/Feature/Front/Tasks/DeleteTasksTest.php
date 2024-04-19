@@ -23,7 +23,11 @@ test('users can delete tasks', function () {
     $this
         ->actingAs($user)
         ->delete(route('tasks.destroy', $task))
-        ->assertSessionHas('status', 'Tarea eliminada satisfactoriamente.')
+        ->assertSessionHas('status', [
+            'type' => 'success',
+            'title' => '¡¡Éxito!!',
+            'message' => 'Tarea eliminada satisfactoriamente.',
+        ])
         ->assertRedirect(route('tasks.index'));
 
     $this->assertDatabaseMissing('tasks', [

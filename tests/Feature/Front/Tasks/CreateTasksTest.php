@@ -37,7 +37,12 @@ test('users can create tasks', function () {
             'title' => $taskStored['title'],
             'description' => $taskStored['description'],
         ])
-        ->assertSessionHas('status', 'Tarea creada satisfactoriamente.')
+        // ->assertSessionHas('status', 'Tarea creada satisfactoriamente.')
+        ->assertSessionHas('status', [
+            'type' => 'success',
+            'title' => '¡¡Éxito!!',
+            'message' => 'Tarea creada satisfactoriamente.',
+        ])
         ->assertRedirect(route('tasks.index'));
 
     $this->assertDatabaseHas('tasks', [

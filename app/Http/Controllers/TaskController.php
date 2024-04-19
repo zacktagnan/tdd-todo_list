@@ -17,7 +17,7 @@ class TaskController extends Controller
         // $tasks = auth()->user()->tasks()->paginate(5);
         /** @var \App\Models\User $authUser **/
         $authUser = auth()->user();
-        $tasks = $authUser->tasks()->paginate(5);
+        $tasks = $authUser->tasks()->latest()->paginate(3);
         return view('tasks.index', compact('tasks'));
     }
 
@@ -40,7 +40,12 @@ class TaskController extends Controller
             'completed' => request()->has('completed'),
         ]);
 
-        session()->flash('status', 'Tarea creada satisfactoriamente.');
+        // session()->flash('status', 'Tarea creada satisfactoriamente.');
+        session()->flash('status', [
+            'type' => 'success',
+            'title' => '¡¡Éxito!!',
+            'message' => 'Tarea creada satisfactoriamente.',
+        ]);
         return redirect()->route('tasks.index');
     }
 
@@ -62,7 +67,11 @@ class TaskController extends Controller
             'completed' => request()->has('completed'),
         ]);
 
-        session()->flash('status', 'Tarea actualizada satisfactoriamente.');
+        session()->flash('status', [
+            'type' => 'success',
+            'title' => '¡¡Éxito!!',
+            'message' => 'Tarea actualizada satisfactoriamente.',
+        ]);
         return redirect()->route('tasks.index');
     }
 
@@ -70,7 +79,11 @@ class TaskController extends Controller
     {
         $task->delete();
 
-        session()->flash('status', 'Tarea eliminada satisfactoriamente.');
+        session()->flash('status', [
+            'type' => 'success',
+            'title' => '¡¡Éxito!!',
+            'message' => 'Tarea eliminada satisfactoriamente.',
+        ]);
         return redirect()->route('tasks.index');
     }
 }
