@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskRequest;
 use App\Models\Task;
+use App\Services\RedirectService;
 use App\Services\TaskService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -71,12 +72,19 @@ class TaskController extends Controller
         TaskService::store(auth()->user(), $request);
 
         // session()->flash('status', 'Tarea CREADA satisfactoriamente.');
-        session()->flash('status', [
+        // ----------------------------------------------------------------
+        // session()->flash('status', [
+        //     'type' => 'success',
+        //     'title' => '¡¡Éxito!!',
+        //     'message' => 'Tarea CREADA satisfactoriamente.',
+        // ]);
+        // return redirect()->route('tasks.index');
+        // ----------------------------------------------------------------
+        return RedirectService::redirectWithSessionFlash('tasks.index', 'status', [
             'type' => 'success',
             'title' => '¡¡Éxito!!',
             'message' => 'Tarea CREADA satisfactoriamente.',
         ]);
-        return redirect()->route('tasks.index');
     }
 
     public function edit(Task $task): View
@@ -110,12 +118,11 @@ class TaskController extends Controller
         // (mediante el Service relacionado)
         TaskService::update($task, $request);
 
-        session()->flash('status', [
+        return RedirectService::redirectWithSessionFlash('tasks.index', 'status', [
             'type' => 'success',
             'title' => '¡¡Éxito!!',
             'message' => 'Tarea ACTUALIZADA satisfactoriamente.',
         ]);
-        return redirect()->route('tasks.index');
     }
 
     public function destroy(Task $task): RedirectResponse
@@ -123,11 +130,10 @@ class TaskController extends Controller
         // $task->delete();
         TaskService::destroy($task);
 
-        session()->flash('status', [
+        return RedirectService::redirectWithSessionFlash('tasks.index', 'status', [
             'type' => 'success',
             'title' => '¡¡Éxito!!',
             'message' => 'Tarea ELIMINADA satisfactoriamente.',
         ]);
-        return redirect()->route('tasks.index');
     }
 }
