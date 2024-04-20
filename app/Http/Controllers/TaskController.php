@@ -24,7 +24,14 @@ class TaskController extends Controller
 
     public function create(): View
     {
-        return view('tasks.create');
+        // return view('tasks.create');
+        return view('tasks.create', [
+            'task' => new Task(),
+            'sectionLabel' => __('tasks/index.form.create_section_label'),
+            'action' => route('tasks.store'),
+            'method' => 'POST',
+            'submit' => __('tasks/index.button.store'),
+        ]);
     }
 
     public function store(TaskRequest $request): RedirectResponse
@@ -43,7 +50,12 @@ class TaskController extends Controller
         // --------------------------------------------------------
         /** @var \App\Models\User $authUser **/
         $authUser = auth()->user();
-        $authUser->tasks()->create($request->all());
+        // Solo vale si NO hay un CHECKBOX que haya enviado como activo (ON)
+        // $authUser->tasks()->create($request->all());
+        // o
+        $authUser->tasks()->create($request->except('completed') + [
+            'completed' => $request->has('completed')
+        ]);
         // o
         // $authUser->tasks()->create([
         //     'title' => $request->validated('title'),
@@ -62,12 +74,24 @@ class TaskController extends Controller
 
     public function edit(Task $task): View
     {
-        return view('tasks.edit', compact('task'));
+        // return view('tasks.edit', compact('task'));
+        return view('tasks.edit', [
+            'task' => $task,
+            'sectionLabel' => __('tasks/index.form.update_section_label'),
+            'action' => route('tasks.update', $task),
+            'method' => 'PUT',
+            'submit' => __('tasks/index.button.update'),
+        ]);
     }
 
     public function update(TaskRequest $request, Task $task): RedirectResponse
     {
-        $task->update($request->all());
+        // Solo vale si NO hay un CHECKBOX que haya enviado como activo (ON)
+        // $task->update($request->all());
+        // o
+        $task->update($request->except('completed') + [
+            'completed' => $request->has('completed')
+        ]);
         // o
         // $task->update([
         //     'title' => $request->validated('title'),
