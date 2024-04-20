@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskRequest;
 use App\Models\Task;
+use App\Services\TaskService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -16,9 +17,11 @@ class TaskController extends Controller
         // ------------------------------------------------
         // Solo las Task del usuario autenticado
         // $tasks = auth()->user()->tasks()->paginate(5);
+        // - - - - - - - - - - - - - - - - - - - - - - - -
         /** @var \App\Models\User $authUser **/
-        $authUser = auth()->user();
-        $tasks = $authUser->tasks()->latest()->paginate(3);
+        // $authUser = auth()->user();
+        // $tasks = $authUser->tasks()->latest()->paginate(3);
+        $tasks = TaskService::paginatedTasks(auth()->user(), 3);
         return view('tasks.index', compact('tasks'));
     }
 
@@ -53,15 +56,19 @@ class TaskController extends Controller
         // Solo vale si NO hay un CHECKBOX que haya enviado como activo (ON)
         // $authUser->tasks()->create($request->all());
         // o
-        $authUser->tasks()->create($request->except('completed') + [
-            'completed' => $request->has('completed')
-        ]);
+        // (las dos siguientes formas si funcionan)
+        // $authUser->tasks()->create($request->except('completed') + [
+        //     'completed' => $request->has('completed')
+        // ]);
         // o
         // $authUser->tasks()->create([
         //     'title' => $request->validated('title'),
         //     'description' => $request->validated('description'),
         //     'completed' => $request->has('completed'),
         // ]);
+        // o
+        // (mediante el Service relacionado)
+        TaskService::store(auth()->user(), $request);
 
         // session()->flash('status', 'Tarea CREADA satisfactoriamente.');
         session()->flash('status', [
@@ -89,15 +96,19 @@ class TaskController extends Controller
         // Solo vale si NO hay un CHECKBOX que haya enviado como activo (ON)
         // $task->update($request->all());
         // o
-        $task->update($request->except('completed') + [
-            'completed' => $request->has('completed')
-        ]);
+        // (las dos siguientes formas si funcionan)
+        // $task->update($request->except('completed') + [
+        //     'completed' => $request->has('completed')
+        // ]);
         // o
         // $task->update([
         //     'title' => $request->validated('title'),
         //     'description' => $request->validated('description'),
         //     'completed' => $request->has('completed'),
         // ]);
+        // o
+        // (mediante el Service relacionado)
+        TaskService::update($task, $request);
 
         session()->flash('status', [
             'type' => 'success',
@@ -109,7 +120,8 @@ class TaskController extends Controller
 
     public function destroy(Task $task): RedirectResponse
     {
-        $task->delete();
+        // $task->delete();
+        TaskService::destroy($task);
 
         session()->flash('status', [
             'type' => 'success',
