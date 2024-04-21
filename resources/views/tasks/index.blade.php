@@ -55,13 +55,19 @@
                                                 {{ __('tasks/index.button.mark_as_completed') }}
                                             </a>
                                         </div> --}}
-                                        <div class="flex items-center">
-                                            <span class="mr-2 text-sm">{{ __('tasks/index.list.completed_label') }}:</span>
-                                            <label class="switch">
-                                                <input type="checkbox" {{ $task->completed ? 'checked' : '' }}>
-                                                <span class="slider round"></span>
-                                            </label>
-                                        </div>
+
+                                        <form action="{{ route('tasks.toggle', $task) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="flex items-center">
+                                                <span class="mr-2 text-sm">{{ __('tasks/index.list.completed_label') }}:</span>
+                                                <label class="switch">
+                                                    <input onclick="this.form.submit()" type="checkbox" {{ $task->completed ? 'checked' : '' }}>
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </div>
+                                        </form>
+
 
                                         <div class="flex justify-end w-full">
                                             <a href="{{ route('tasks.edit', $task) }}" class="px-4 py-2 font-bold text-white bg-gray-700 rounded hover:bg-gray-500" title="{{ __('tasks/index.button.edit') }}">

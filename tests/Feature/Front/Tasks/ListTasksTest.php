@@ -22,3 +22,40 @@ test('users can render the tasks list', function () {
     // ->assertSeeText('Mis Tareas');
     // ->assertSeeText('tasks/index.section_label');
 })->group('tasks', 'tasks_list');
+
+test('users can toggle tasks', function () {
+    $user = User::factory()->create();
+    $task = $user->tasks()->create([
+        'title' => 'Tarea a Togglear',
+        'description' => 'La Descripción de la Tarea a Togglear',
+        'completed' => false,
+    ]);
+
+    $response = $this
+        ->actingAs($user)
+        ->put(route('tasks.toggle', $task));
+
+    if ($task->completed) {
+        $response->assertSessionHas('status', [
+            'type' => 'success',
+            'title' => '¡¡Éxito!!',
+            'message' => 'Tarea marcada como PENDIENTE satisfactoriamente.',
+        ]);
+    } else {
+        $response->assertSessionHas('status', [
+            'type' => 'success',
+            'title' => '¡¡Éxito!!',
+            'message' => 'Tarea marcada como COMPLETADA satisfactoriamente.',
+        ]);
+    }
+
+    $response->assertRedirect(route('tasks.index'));
+
+    $this->assertDatabaseHas('tasks', [
+        'id' => $task->id,
+        'user_id' => $user->id,
+        'title' => $task->title,
+        'description' => $task->description,
+        'completed' => !$task->completed,
+    ]);
+})->group('tasks', 'tasks_list');

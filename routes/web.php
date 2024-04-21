@@ -25,3 +25,16 @@ require __DIR__ . '/auth.php';
 
 
 Route::resource('tasks', TaskController::class)->middleware('auth')->except(['show']);
+
+// Route::middleware(['auth'])->group(function () {
+//     Route::prefix('tasks')->as('tasks.')->group(function () {
+//         Route::put('/{task}/toggle', [TaskController::class, 'toggle'])->name('toggle');
+//     });
+// });
+
+//o
+
+Route::put('/{task}/toggle', [TaskController::class, 'toggle'])
+    ->prefix('tasks')
+    ->name('tasks.toggle')
+    ->middleware('auth');

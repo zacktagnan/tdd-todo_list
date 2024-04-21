@@ -32,4 +32,11 @@ final class TaskService
     {
         $task->delete();
     }
+
+    public static function toggle(Task $task): void
+    {
+        $task->update([
+            'completed' => !$task->completed,
+        ]);
+    }
 }

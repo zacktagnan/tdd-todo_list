@@ -136,4 +136,16 @@ class TaskController extends Controller
             'message' => 'Tarea ELIMINADA satisfactoriamente.',
         ]);
     }
+
+    public function toggle(Task $task): RedirectResponse
+    {
+        $taskCompletedState = $task->completed ? 'PENDIENTE' : 'COMPLETADA';
+        TaskService::toggle($task);
+
+        return RedirectService::redirectWithSessionFlash('tasks.index', 'status', [
+            'type' => 'success',
+            'title' => '¡¡Éxito!!',
+            'message' => 'Tarea marcada como ' . $taskCompletedState . ' satisfactoriamente.',
+        ]);
+    }
 }
