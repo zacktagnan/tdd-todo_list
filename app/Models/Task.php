@@ -14,4 +14,14 @@ class Task extends Model
         'description',
         'completed',
     ];
+
+    public function createdAtWithFormat()
+    {
+        return $this->created_at->isoFormat('llll');
+    }
+
+    public function createdAtDiffForHumans()
+    {
+        return $this->created_at->diffForHumans();
+    }
 }

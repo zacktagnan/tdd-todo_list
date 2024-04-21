@@ -36,12 +36,9 @@
                                         <div class="flex items-center justify-between">
                                             <h4 class="text-base font-medium leading-none">{{ $task->title }}</h4>
 
-                                            <div class="flex items-center">
-                                                <span class="mr-2">{{ __('tasks/index.list.completed_label') }}:</span>
-                                                <label class="switch">
-                                                    <input type="checkbox" {{ $task->completed ? 'checked' : '' }}>
-                                                    <span class="slider round"></span>
-                                                </label>
+                                            <div class="flex items-center text-sm">
+                                                <span class="mr-2">{{ __('tasks/index.list.created_label') }}:</span>
+                                                {{ $task->createdAtWithFormat() . ' - ' . $task->createdAtDiffForHumans() }}
                                             </div>
                                         </div>
                                     </div>
@@ -53,19 +50,30 @@
                                     </div>
 
                                     <div class="px-4 py-2.5 flex rounded-none rounded-b-lg justify-evenly bg-sky-100">
-                                        <a href="#" class="px-4 py-2 font-bold text-white bg-green-700 rounded hover:bg-green-500" title="{{ __('tasks/index.button.mark_as_completed') }}">
-                                            {{ __('tasks/index.button.mark_as_completed') }}
-                                        </a>
+                                        {{-- <div class="flex">
+                                            <a href="#" class="w-56 px-4 py-2 font-bold text-white bg-green-700 rounded hover:bg-green-500" title="{{ __('tasks/index.button.mark_as_completed') }}">
+                                                {{ __('tasks/index.button.mark_as_completed') }}
+                                            </a>
+                                        </div> --}}
+                                        <div class="flex items-center">
+                                            <span class="mr-2 text-sm">{{ __('tasks/index.list.completed_label') }}:</span>
+                                            <label class="switch">
+                                                <input type="checkbox" {{ $task->completed ? 'checked' : '' }}>
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
 
-                                        <a href="{{ route('tasks.edit', $task) }}" class="px-4 py-2 font-bold text-white bg-gray-700 rounded hover:bg-gray-500" title="{{ __('tasks/index.button.edit') }}">
-                                            {{ __('tasks/index.button.edit') }}
-                                        </a>
+                                        <div class="flex justify-end w-full">
+                                            <a href="{{ route('tasks.edit', $task) }}" class="px-4 py-2 font-bold text-white bg-gray-700 rounded hover:bg-gray-500" title="{{ __('tasks/index.button.edit') }}">
+                                                {{ __('tasks/index.button.edit') }}
+                                            </a>
 
-                                        <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"class="px-4 py-2 font-bold text-white bg-red-700 rounded hover:bg-red-500" title="{{ __('tasks/index.button.delete') }}" onclick="return confirm('{{ __('¿En verdad se desea ELIMINAR este registro?') }}')">{{ __('tasks/index.button.delete') }}</button>
-                                        </form>
+                                            <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"class="px-4 py-2 font-bold text-white bg-red-700 rounded ms-2 hover:bg-red-500" title="{{ __('tasks/index.button.delete') }}" onclick="return confirm('{{ __('¿En verdad se desea ELIMINAR este registro?') }}')">{{ __('tasks/index.button.delete') }}</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
 

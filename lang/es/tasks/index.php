@@ -8,6 +8,7 @@ return [
     'list' => [
         'section_label' => 'Mis Tareas',
         'no_registers' => 'No hay tareas disponibles',
+        'created_label' => 'Creada',
         'completed_label' => 'Completada',
     ],
 
