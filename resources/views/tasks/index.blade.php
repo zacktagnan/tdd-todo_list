@@ -84,7 +84,7 @@
                                 </div>
 
                             @empty
-                                <div class="w-full p-4 text-center text-white border rounded-lg shadow border-slate-700 shadow-slate-500 bg-slate-400">
+                                <div class="w-full p-4 mt-4 text-center text-white border rounded-lg shadow border-slate-700 shadow-slate-500 bg-slate-400">
                                     :: <span class="italic">No hay tareas disponibles actualmente</span> ::
                                 </div>
                             @endforelse

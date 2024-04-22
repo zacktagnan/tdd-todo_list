@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Services\RedirectService;
 use App\Services\TaskService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class TaskController extends Controller
@@ -89,6 +90,8 @@ class TaskController extends Controller
 
     public function edit(Task $task): View
     {
+        // $this->authorize('update', $task);
+        Gate::authorize('update', $task);
         // return view('tasks.edit', compact('task'));
         return view('tasks.edit', [
             'task' => $task,
@@ -101,6 +104,8 @@ class TaskController extends Controller
 
     public function update(TaskRequest $request, Task $task): RedirectResponse
     {
+        // $this->authorize('update', $task);
+        Gate::authorize('update', $task);
         // Solo vale si NO hay un CHECKBOX que haya enviado como activo (ON)
         // $task->update($request->all());
         // o
