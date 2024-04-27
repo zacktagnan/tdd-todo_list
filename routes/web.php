@@ -5,6 +5,16 @@ use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    // ================================
+    // :: Prueba de Debug - ini ::
+    $a = 7;
+    $b = 4;
+    $c = $a + $b;
+    $d = $a * $b;
+    $aloha = 'Aloha!!';
+    // echo $aloha;
+    // :: Prueba de Debug - fin ::
+    // ================================
     return view('welcome');
 });
 
