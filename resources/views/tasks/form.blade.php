@@ -61,8 +61,20 @@
                                     {{ $submit }}
                                 </button>
 
-                                <a href="#" class="px-4 py-2 font-bold text-white bg-red-700 rounded ms-2 hover:bg-red-500" title="{{ __('tasks/index.button.delete') }}">
+                                @if ($method === 'PUT')
+                                {{-- <a href="#" class="px-4 py-2 font-bold text-white bg-red-700 rounded ms-2 hover:bg-red-500" title="{{ __('tasks/index.button.delete') }}">
                                     {{ __('tasks/index.button.delete') }}
-                                </a>
+                                </a> --}}
+                                <button type="submit" form="f_delete_task" class="px-4 py-2 font-bold text-white bg-red-700 rounded ms-2 hover:bg-red-500"
+                                    title="{{ __('tasks/index.button.delete') }}"
+                                    onclick="return confirm('{{ __('¿En verdad se desea ELIMINAR este registro?') }}')">{{ __('tasks/index.button.delete') }}</button>
+                                @endif
                             </div>
                         </form>
+
+                        @if ($method === 'PUT')
+                        <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="d-inline" id="f_delete_task">
+                            @csrf
+                            @method('DELETE')
+                        </form>
+                        @endif

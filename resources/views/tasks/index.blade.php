@@ -38,7 +38,7 @@
                                         <div class="flex items-center justify-between">
                                             <div class="flex flex-col">
                                                 <h4 class="text-base font-medium leading-none">{{ $task->title }}</h4>
-                                                <p class="text-xs text-gray-500">{{ __('tasks/index.list.for') }} <span class="italic underline">{{ $task->user->name }}</span></p>
+                                                <p class="text-xs text-gray-500">{{ __('tasks/index.list.for') }}: <span class="italic font-semibold underline">{{ auth()->user()->name === $task->user->name ? __('tasks/index.list.me') : $task->user->name }}</span></p>
                                             </div>
 
                                             <div class="flex flex-col items-end justify-center text-sm leading-none">
@@ -97,11 +97,17 @@
                                             </p>
                                             @endcan
 
+                                            @can('delete', $task)
                                             <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"class="px-4 py-2 font-bold text-white bg-red-700 rounded ms-2 hover:bg-red-500" title="{{ __('tasks/index.button.delete') }}" onclick="return confirm('{{ __('¿En verdad se desea ELIMINAR este registro?') }}')">{{ __('tasks/index.button.delete') }}</button>
                                             </form>
+                                            @else
+                                            <p class="px-4 py-2 font-bold text-gray-400 bg-red-700 rounded cursor-default ms-2" title="{{ __('tasks/index.button.delete') }} - {{ __('tasks/index.button.no_available') }}">
+                                                {{ __('tasks/index.button.delete') }}
+                                            </p>
+                                            @endcan
                                         </div>
                                     </div>
                                 </div>

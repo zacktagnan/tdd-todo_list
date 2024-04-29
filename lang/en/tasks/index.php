@@ -12,6 +12,7 @@ return [
         'created_label' => 'Created',
         'completed_label' => 'Completed',
         'for' => 'for',
+        'me' => 'me',
         'submenu_items' => [
             'all' => 'all',
             'all_title' => 'All the available tasks',
