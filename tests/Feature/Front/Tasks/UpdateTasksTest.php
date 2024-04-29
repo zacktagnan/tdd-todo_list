@@ -88,7 +88,7 @@ test('validation works on update task', function () {
         ->assertSessionHasErrors(['title', 'description']);
 })->group('tasks', 'tasks_update');
 
-test('users cannot update a task from another user', function () {
+test('users cannot update a task from another user - only admins', function () {
     $user = User::factory()->create();
     $taskStored = [
         'title' => 'Tarea posible de actualizar',
