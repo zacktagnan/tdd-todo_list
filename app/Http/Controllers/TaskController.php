@@ -98,6 +98,7 @@ class TaskController extends Controller
     {
         // $this->authorize('update', $task);
         Gate::authorize('update', $task);
+
         // return view('tasks.edit', compact('task'));
         return view('tasks.edit', [
             'task' => $task,
@@ -112,6 +113,7 @@ class TaskController extends Controller
     {
         // $this->authorize('update', $task);
         Gate::authorize('update', $task);
+
         // Solo vale si NO hay un CHECKBOX que haya enviado como activo (ON)
         // $task->update($request->all());
         // o
@@ -138,6 +140,8 @@ class TaskController extends Controller
 
     public function destroy(Task $task): RedirectResponse
     {
+        Gate::authorize('delete', $task);
+
         // $task->delete();
         TaskService::destroy($task);
 

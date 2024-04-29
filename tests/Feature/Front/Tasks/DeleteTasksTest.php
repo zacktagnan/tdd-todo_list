@@ -34,3 +34,29 @@ test('users can delete tasks', function () {
         'id' => $task->id,
     ]);
 })->group('tasks', 'tasks_delete');
+
+test('users cannot delete a task from another user - only admins', function () {
+    $user = User::factory()->create();
+    $taskStored = [
+        'title' => 'Tarea posible de eliminar',
+        'description' => 'La Descripción de la Tarea a eliminar',
+    ];
+    $task = $user->tasks()->create([
+        'title' => $taskStored['title'],
+        'description' => $taskStored['description'],
+    ]);
+    $anotherUser = User::factory()->create();
+
+    $this
+        ->actingAs($anotherUser)
+        ->delete(route('tasks.destroy', $task))
+        ->assertForbidden();
+
+    $this->assertDatabaseHas('tasks', [
+        'id' => $task->id,
+        'user_id' => $user->id,
+        'title' => $taskStored['title'],
+        'description' => $taskStored['description'],
+        'completed' => false,
+    ]);
+})->group('tasks', 'tasks_delete');
