@@ -44,4 +44,13 @@ final class TaskService
             'completed' => !$task->completed,
         ]);
     }
+
+    public static function getTotalTasks(User|null $user = null): int
+    {
+        if (is_null($user)) {
+            return Task::count();
+        }
+
+        return $user->tasks()->count();
+    }
 }

@@ -24,13 +24,15 @@ class TaskController extends Controller
         // $authUser = auth()->user();
         // $tasks = $authUser->tasks()->latest()->paginate(3);
         $tasks = TaskService::paginatedTasks(3);
-        return view('tasks.index', compact('tasks'));
+        $totalTasks = TaskService::getTotalTasks();
+        return view('tasks.index', compact('tasks', 'totalTasks'));
     }
 
     public function ownList(): View
     {
         $ownTasks = TaskService::ownPaginatedTasks(auth()->user(), 3);
-        return view('tasks.own-list', compact('ownTasks'));
+        $totalTasks = TaskService::getTotalTasks(auth()->user());
+        return view('tasks.own-list', compact('ownTasks', 'totalTasks'));
     }
 
     public function create(): View

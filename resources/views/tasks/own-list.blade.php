@@ -13,9 +13,10 @@
                     <div class="w-1/2 mx-auto border rounded-lg shadow border-cyan-700 shadow-cyan-500">
                         <div class="px-4 py-2.5 bg-blue-100 rounded-none rounded-t-lg">
                             <div class="flex items-center justify-between">
-                                {{-- <h3>Mis Tareas</h3> --}}
-                                {{-- <h3 alt="Mis Tareas">{{ __('Mis Tareas') }}</h3> --}}
-                                <h3 class="text-lg font-medium leading-none">{{ __('tasks/index.list.own_section_label') }}</h3>
+                                <div class="flex items-end">
+                                    <h3 class="text-lg font-medium leading-none">{{ __('tasks/index.list.own_section_label') }}</h3>
+                                    <span class="ml-1 text-xs">({{ $totalTasks }})</span>
+                                </div>
 
                                 @include('tasks.submenu-items')
 
