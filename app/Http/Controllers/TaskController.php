@@ -23,8 +23,14 @@ class TaskController extends Controller
         /** @var \App\Models\User $authUser **/
         // $authUser = auth()->user();
         // $tasks = $authUser->tasks()->latest()->paginate(3);
-        $tasks = TaskService::paginatedTasks(auth()->user(), 3);
+        $tasks = TaskService::paginatedTasks(3);
         return view('tasks.index', compact('tasks'));
+    }
+
+    public function ownList(): View
+    {
+        $ownTasks = TaskService::ownPaginatedTasks(auth()->user(), 3);
+        return view('tasks.own-list', compact('ownTasks'));
     }
 
     public function create(): View
@@ -142,12 +148,22 @@ class TaskController extends Controller
         ]);
     }
 
-    public function toggle(Task $task): RedirectResponse
+    public function toggleFromAllList(Task $task): RedirectResponse
+    {
+        return $this->toggle($task, 'tasks.index');
+    }
+
+    public function toggleFromMineList(Task $task): RedirectResponse
+    {
+        return $this->toggle($task, 'tasks.own-list');
+    }
+
+    public function toggle(Task $task, string $route): RedirectResponse
     {
         $taskCompletedState = $task->completed ? 'PENDIENTE' : 'COMPLETADA';
         TaskService::toggle($task);
 
-        return RedirectService::redirectWithSessionFlash('tasks.index', 'status', [
+        return RedirectService::redirectWithSessionFlash($route, 'status', [
             'type' => 'success',
             'title' => '¡¡Éxito!!',
             'message' => 'Tarea marcada como ' . $taskCompletedState . ' satisfactoriamente.',

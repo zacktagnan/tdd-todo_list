@@ -15,7 +15,7 @@
                             <div class="flex items-center justify-between">
                                 {{-- <h3>Mis Tareas</h3> --}}
                                 {{-- <h3 alt="Mis Tareas">{{ __('Mis Tareas') }}</h3> --}}
-                                <h3 class="text-lg font-medium leading-none">{{ __('tasks/index.list.index_section_label') }}</h3>
+                                <h3 class="text-lg font-medium leading-none">{{ __('tasks/index.list.own_section_label') }}</h3>
 
                                 @include('tasks.submenu-items')
 
@@ -31,20 +31,16 @@
                                 <x-flash-messages />
                             @endif
 
-                            @forelse ($tasks as $task)
+                            @forelse ($ownTasks as $task)
 
                                 <div class="w-full mt-4 border rounded-lg shadow border-cyan-700 shadow-cyan-500">
                                     <div class="px-4 py-2.5 bg-sky-100 rounded-none rounded-t-lg">
                                         <div class="flex items-center justify-between">
-                                            <div class="flex flex-col">
-                                                <h4 class="text-base font-medium leading-none">{{ $task->title }}</h4>
-                                                <p class="text-xs text-gray-500">{{ __('tasks/index.list.for') }} <span class="italic underline">{{ $task->user->name }}</span></p>
-                                            </div>
+                                            <h4 class="text-base font-medium leading-none">{{ $task->title }}</h4>
 
                                             <div class="flex flex-col items-end justify-center text-sm leading-none">
                                                 <p>
-                                                    <span class="mr-2">{{ __('tasks/index.list.created_label') }}:</span><span class="text-xs underline">{{
-                                                        $task->createdAtWithFormat() }}</span>
+                                                    <span class="mr-2">{{ __('tasks/index.list.created_label') }}:</span><span class="text-xs underline">{{ $task->createdAtWithFormat() }}</span>
                                                 </p>
                                                 <p class="text-[10px] font-bold">{{ $task->createdAtDiffForHumans() }}</p>
                                             </div>
@@ -69,17 +65,8 @@
                                             @method('PUT')
                                             <div class="flex items-center">
                                                 <span class="mr-2 text-sm">{{ __('tasks/index.list.completed_label') }}:</span>
-
-                                                @php
-                                                    if (Auth::user()->can('update', $task)) {
-                                                        $checkboxTitle = $task->completed ? 'Marcar como PENDIENTE' : 'Marcar como COMPLETADA';
-                                                    } else {
-                                                        $checkboxTitle = 'Acción no disponible';
-                                                    }
-                                                @endphp
-
-                                                <label class="switch" title="{{ $checkboxTitle }}">
-                                                    <input onclick="this.form.submit()" type="checkbox" {{ $task->completed ? 'checked' : '' }} @cannot('update', $task) disabled="" @endcannot>
+                                                <label class="switch">
+                                                    <input onclick="this.form.submit()" type="checkbox" {{ $task->completed ? 'checked' : '' }}>
                                                     <span class="slider round"></span>
                                                 </label>
                                             </div>
@@ -87,15 +74,9 @@
 
 
                                         <div class="flex justify-end w-full">
-                                            @can('update', $task)
                                             <a href="{{ route('tasks.edit', $task) }}" class="px-4 py-2 font-bold text-white bg-gray-700 rounded hover:bg-gray-500" title="{{ __('tasks/index.button.edit') }}">
                                                 {{ __('tasks/index.button.edit') }}
                                             </a>
-                                            @else
-                                            <p class="px-4 py-2 font-bold text-gray-400 bg-gray-700 rounded cursor-default" title="{{ __('tasks/index.button.edit') }} - {{ __('tasks/index.button.no_available') }}">
-                                                {{ __('tasks/index.button.edit') }}
-                                            </p>
-                                            @endcan
 
                                             <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="d-inline">
                                                 @csrf
@@ -108,7 +89,7 @@
 
                             @empty
                                 <div class="w-full p-4 mt-4 text-center text-white border rounded-lg shadow border-slate-700 shadow-slate-500 bg-slate-400">
-                                    :: <span class="italic">No hay tareas disponibles actualmente</span> ::
+                                    :: <span class="italic">No hay tareas propias disponibles actualmente</span> ::
                                 </div>
                             @endforelse
 
@@ -117,7 +98,7 @@
 
                         {{-- <div class="h-4 mt-4 bg-blue-100 rounded-none rounded-b-lg"></div> --}}
                         <div class="px-4 py-2 mt-4 bg-blue-100 rounded-none rounded-b-lg">
-                            {{ $tasks->links() }}
+                            {{ $ownTasks->links() }}
                         </div>
                     </div>
 

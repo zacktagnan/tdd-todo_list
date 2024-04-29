@@ -36,15 +36,17 @@ require __DIR__ . '/auth.php';
 
 Route::resource('tasks', TaskController::class)->middleware('auth')->except(['show']);
 
-// Route::middleware(['auth'])->group(function () {
-//     Route::prefix('tasks')->as('tasks.')->group(function () {
-//         Route::put('/{task}/toggle', [TaskController::class, 'toggle'])->name('toggle');
-//     });
-// });
+// Route::put('/{task}/toggle', [TaskController::class, 'toggle'])
+//     ->prefix('tasks')
+//     ->name('tasks.toggle')
+//     ->middleware('auth');
 
 //o
 
-Route::put('/{task}/toggle', [TaskController::class, 'toggle'])
-    ->prefix('tasks')
-    ->name('tasks.toggle')
-    ->middleware('auth');
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('tasks')->as('tasks.')->group(function () {
+        Route::get('/own-list', [TaskController::class, 'ownList'])->name('own-list');
+        Route::put('/{task}/toggle', [TaskController::class, 'toggleFromAllList'])->name('toggle');
+        Route::put('/{task}/toggle-mine', [TaskController::class, 'toggleFromMineList'])->name('toggle-mine');
+    });
+});

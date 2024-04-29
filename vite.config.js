@@ -11,4 +11,13 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    // -> Esto no hace que varíe la carga ... Y sigue habiendo clases Tailwind sin cargar
+    // server: {
+    //     hmr: {
+    //         host: "localhost",
+    //     },
+    //     watch: {
+    //         usePolling: true
+    //     },
+    // },
 });

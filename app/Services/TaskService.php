@@ -9,7 +9,12 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 final class TaskService
 {
-    public static function paginatedTasks(User $user, int $itemsPerPage = 5): LengthAwarePaginator
+    public static function paginatedTasks(int $itemsPerPage = 5): LengthAwarePaginator
+    {
+        return Task::latest()->paginate($itemsPerPage);
+    }
+
+    public static function ownPaginatedTasks(User $user, int $itemsPerPage = 5): LengthAwarePaginator
     {
         return $user->tasks()->latest()->paginate($itemsPerPage);
     }

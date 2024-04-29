@@ -6,10 +6,18 @@ return [
     'general_label' => 'Tasks',
 
     'list' => [
-        'section_label' => 'My Tasks',
+        'index_section_label' => 'Tasks',
+        'own_section_label' => 'My Tasks',
         'no_registers' => 'No tasks available',
         'created_label' => 'Created',
         'completed_label' => 'Completed',
+        'for' => 'for',
+        'submenu_items' => [
+            'all' => 'all',
+            'all_title' => 'All the available tasks',
+            'mine' => 'mine',
+            'mine_title' => 'All my available tasks',
+        ],
     ],
 
     'form' => [
@@ -28,5 +36,6 @@ return [
         'cancel' => 'Cancel',
         'store' => 'Create',
         'update' => 'Update',
+        'no_available' => 'No available',
     ],
 ];
