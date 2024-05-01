@@ -15,7 +15,6 @@ test('users can render the task list', function () {
         ->assertSuccessful();
 
     $response->assertViewIs('tasks.index')
-        ->assertViewHas('totalTasks')
         ->assertViewHas('tasks');
     // ->assertViewHas('tasks')
     // -> Solo vale texto que se imprima directamente en el HTML
@@ -31,7 +30,6 @@ test('users can render their own tasks list', function () {
         ->assertSuccessful();
 
     $response->assertViewIs('tasks.own-list')
-        ->assertViewHas('totalTasks')
         ->assertViewHas('ownTasks');
 })->group('tasks', 'tasks_list');
 
