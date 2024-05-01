@@ -52,7 +52,8 @@
     right: 0;
     bottom: 0;
     /* background-color: #ccc; */
-    background-color: #c2e1fa;
+    /* background-color: #c2e1fa; */
+    background-color: #89caff;
     -webkit-transition: .4s;
     transition: .4s;
 }
@@ -72,6 +73,10 @@
 input:disabled+.slider {
     opacity: 0.38;
     pointer-events: none;
+}
+
+input:disabled+.slider:before {
+    background-color: #eee;
 }
 
 input:checked+.slider {

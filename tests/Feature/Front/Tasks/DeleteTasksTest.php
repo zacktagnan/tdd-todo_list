@@ -35,6 +35,30 @@ test('users can delete tasks', function () {
     ]);
 })->group('tasks', 'tasks_delete');
 
+test('users can delete tasks from own list', function () {
+    $timestamp = time();
+    $user = User::factory()->create();
+    $task = $user->tasks()->create([
+        'title' => 'El Título de la Tarea propia a eliminar ' . $timestamp,
+        'description' => 'La Descripción de la Tarea propia a eliminar ' . $timestamp,
+        'completed' => false,
+    ]);
+
+    $this
+        ->actingAs($user)
+        ->delete(route('tasks.destroy-mine', $task))
+        ->assertSessionHas('status', [
+            'type' => 'success',
+            'title' => '¡¡Éxito!!',
+            'message' => 'Tarea ELIMINADA satisfactoriamente.',
+        ])
+        ->assertRedirect(route('tasks.own-list'));
+
+    $this->assertDatabaseMissing('tasks', [
+        'id' => $task->id,
+    ]);
+})->group('tasks', 'tasks_delete');
+
 test('users cannot delete a task from another user - only admins', function () {
     $user = User::factory()->create();
     $taskStored = [

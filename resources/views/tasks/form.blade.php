@@ -53,7 +53,7 @@
                             </div>
 
                             <div class="px-4 py-2.5 flex rounded-none rounded-b-lg justify-end bg-blue-100">
-                                <a href="{{ route('tasks.index') }}" class="px-4 py-2 font-bold text-white bg-gray-700 rounded hover:bg-gray-500" title="{{ __('tasks/index.button.cancel') }}">
+                                <a href="{{ $routeForCancelBtn }}" class="px-4 py-2 font-bold text-white bg-gray-700 rounded hover:bg-gray-500" title="{{ __('tasks/index.button.cancel') }}">
                                     {{ __('tasks/index.button.cancel') }}
                                 </a>
 
@@ -68,8 +68,11 @@
                                 <button type="submit" form="f_delete_task" class="px-4 py-2 font-bold text-white bg-red-700 rounded ms-2 hover:bg-red-500"
                                     title="{{ __('tasks/index.button.delete') }}"
                                     onclick="return confirm('{{ __('¿En verdad se desea ELIMINAR este registro?') }}')">{{ __('tasks/index.button.delete') }}</button>
+                                <input type="hidden" name="redirect_route" value="{{ $redirectRoute }}" />
+                                <input type="hidden" name="redirect_page" value="{{ $redirectPage }}" />
                                 @endif
                             </div>
+
                         </form>
 
                         @if ($method === 'PUT')

@@ -61,28 +61,35 @@
                                             </a>
                                         </div> --}}
 
-                                        <form action="{{ route('tasks.toggle', $task) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('tasks.toggle-mine', $task) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('PUT')
                                             <div class="flex items-center">
                                                 <span class="mr-2 text-sm">{{ __('tasks/index.list.completed_label') }}:</span>
-                                                <label class="switch">
+
+                                                @php
+                                                    $checkboxTitle = $task->completed ? 'Marcar como PENDIENTE' : 'Marcar como COMPLETADA';
+                                                @endphp
+
+                                                <label class="switch" title="{{ $checkboxTitle }}">
                                                     <input onclick="this.form.submit()" type="checkbox" {{ $task->completed ? 'checked' : '' }}>
                                                     <span class="slider round"></span>
                                                 </label>
                                             </div>
+                                            <input type="hidden" name="redirect_page" value="{{ $ownTasks->currentPage() }}" />
                                         </form>
 
 
                                         <div class="flex justify-end w-full">
-                                            <a href="{{ route('tasks.edit', $task) }}" class="px-4 py-2 font-bold text-white bg-gray-700 rounded hover:bg-gray-500" title="{{ __('tasks/index.button.edit') }}">
+                                            <a href="{{ route('tasks.edit', [$task, 'referer' => 'own-' . $ownTasks->currentPage()]) }}" class="px-4 py-2 font-bold text-white bg-gray-700 rounded hover:bg-gray-500" title="{{ __('tasks/index.button.edit') }}">
                                                 {{ __('tasks/index.button.edit') }}
                                             </a>
 
-                                            <form action="{{ route('tasks.destroy', $task) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('tasks.destroy-mine', $task) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"class="px-4 py-2 font-bold text-white bg-red-700 rounded ms-2 hover:bg-red-500" title="{{ __('tasks/index.button.delete') }}" onclick="return confirm('{{ __('¿En verdad se desea ELIMINAR este registro?') }}')">{{ __('tasks/index.button.delete') }}</button>
+                                                <input type="hidden" name="redirect_page" value="{{ $ownTasks->currentPage() }}" />
                                             </form>
                                         </div>
                                     </div>

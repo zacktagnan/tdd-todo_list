@@ -34,7 +34,7 @@ require __DIR__ . '/auth.php';
 // -----------------------------------------------------------------------------------------------
 
 
-Route::resource('tasks', TaskController::class)->middleware('auth')->except(['show']);
+Route::resource('tasks', TaskController::class)->middleware('auth')->except(['show', 'edit']);
 
 // Route::put('/{task}/toggle', [TaskController::class, 'toggle'])
 //     ->prefix('tasks')
@@ -45,6 +45,11 @@ Route::resource('tasks', TaskController::class)->middleware('auth')->except(['sh
 
 Route::middleware(['auth'])->group(function () {
     Route::prefix('tasks')->as('tasks.')->group(function () {
+        // Route::get('/{task}/edit', [TaskController::class, 'edit'])->name('edit');
+        Route::get('/{task}/edit/referer/{referer}', [TaskController::class, 'edit'])->name('edit');
+        Route::put('/{task}/update-mine', [TaskController::class, 'updateFromMineList'])->name('update-mine');
+        Route::delete('/{task}/destroy-mine', [TaskController::class, 'destroyFromMineList'])->name('destroy-mine');
+
         Route::get('/own-list', [TaskController::class, 'ownList'])->name('own-list');
         Route::put('/{task}/toggle', [TaskController::class, 'toggleFromAllList'])->name('toggle');
         Route::put('/{task}/toggle-mine', [TaskController::class, 'toggleFromMineList'])->name('toggle-mine');

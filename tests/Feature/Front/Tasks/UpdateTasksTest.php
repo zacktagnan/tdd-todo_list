@@ -7,7 +7,8 @@ test('guests cannot render the edit tasks form', function () {
     $task = Task::factory()->create();
 
     $this
-        ->get(route('tasks.edit', $task))
+        // ->get(route('tasks.edit', $task))
+        ->get(route('tasks.edit', [$task, 'referer' => 'index-2']))
         ->assertRedirect(route('login'));
 })->group('tasks', 'tasks_update');
 
@@ -22,7 +23,8 @@ test('users can render the edit tasks form', function () {
 
     $this
         ->actingAs($user)
-        ->get(route('tasks.edit', $task))
+        // ->get(route('tasks.edit', $task))
+        ->get(route('tasks.edit', [$task, 'referer' => 'index-2']))
         ->assertOk()
         ->assertViewIs('tasks.edit')
         ->assertViewHas('task');

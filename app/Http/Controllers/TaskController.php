@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Services\RedirectService;
 use App\Services\TaskService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
@@ -23,14 +24,14 @@ class TaskController extends Controller
         /** @var \App\Models\User $authUser **/
         // $authUser = auth()->user();
         // $tasks = $authUser->tasks()->latest()->paginate(3);
-        $tasks = TaskService::paginatedTasks(3);
+        $tasks = TaskService::paginatedTasks(2);
         $totalTasks = TaskService::getTotalTasks();
         return view('tasks.index', compact('tasks', 'totalTasks'));
     }
 
     public function ownList(): View
     {
-        $ownTasks = TaskService::ownPaginatedTasks(auth()->user(), 3);
+        $ownTasks = TaskService::ownPaginatedTasks(auth()->user(), 2);
         $totalTasks = TaskService::getTotalTasks(auth()->user());
         return view('tasks.own-list', compact('ownTasks', 'totalTasks'));
     }
@@ -44,6 +45,7 @@ class TaskController extends Controller
             'action' => route('tasks.store'),
             'method' => 'POST',
             'submit' => __('tasks/index.button.store'),
+            'routeForCancelBtn' => route('tasks.index'),
         ]);
     }
 
@@ -89,15 +91,29 @@ class TaskController extends Controller
         // ]);
         // return redirect()->route('tasks.index');
         // ----------------------------------------------------------------
-        return RedirectService::redirectWithSessionFlash('tasks.index', 'status', [
+        return RedirectService::redirectWithSessionFlash(['tasks.index', 1], 'status', [
             'type' => 'success',
             'title' => '¡¡Éxito!!',
             'message' => 'Tarea CREADA satisfactoriamente.',
         ]);
     }
 
-    public function edit(Task $task): View
+    public function edit(Task $task, string $referer): View
+    // public function edit(Task $task): View
     {
+        // if (str_contains($_SERVER['HTTP_REFERER'], 'own-list')) {
+        //     $redirectRoute = 'tasks.own-list';
+        // } else {
+        //     $redirectRoute = 'tasks.index';
+        // }
+        // dd($page, $_SERVER['HTTP_REFERER'], $redirectRoute);
+        $refererArr = explode('-', $referer);
+        $redirectRoute = $refererArr[0] === 'index' ? 'tasks.index' : 'tasks.own-list';
+        $actionRoute = $refererArr[0] === 'index'
+            ? route('tasks.update', $task)
+            : route('tasks.update-mine', $task);
+        // $redirectRoute = $refererArr[0] === 'index' ? 'index' : 'own-list';
+        $page = $refererArr[1];
         // $this->authorize('update', $task);
         Gate::authorize('update', $task);
 
@@ -105,14 +121,27 @@ class TaskController extends Controller
         return view('tasks.edit', [
             'task' => $task,
             'sectionLabel' => __('tasks/index.form.update_section_label'),
-            'action' => route('tasks.update', $task),
+            'action' => $actionRoute,
             'method' => 'PUT',
             'submit' => __('tasks/index.button.update'),
+            // 'routeForCancelBtn' => route('tasks.index'),
+            'routeForCancelBtn' => $page > 1
+                ? route($redirectRoute, ['page' => $page])
+                : route($redirectRoute),
+            // 'redirectRoute' => str_contains($_SERVER['HTTP_REFERER'], 'own-list')
+            //     ? 'tasks.own-list'
+            //     : 'tasks.index',
+            // ------------------------------------------------------------------------
+            // ¡¡ATENCIÓN!! El TEST no admite el uso del condicional anterior...
+            // ------------------------------------------------------------------------
+            'redirectRoute' => $redirectRoute,
+            'redirectPage' => $page,
         ]);
     }
 
     public function update(TaskRequest $request, Task $task): RedirectResponse
     {
+        /*
         // $this->authorize('update', $task);
         Gate::authorize('update', $task);
 
@@ -133,43 +162,119 @@ class TaskController extends Controller
         // (mediante el Service relacionado)
         TaskService::update($task, $request);
 
-        return RedirectService::redirectWithSessionFlash('tasks.index', 'status', [
+        // $redirectRoute = '';
+        // $redirectRoute = 'tasks.index';
+        // // $redirectRoute = match ($request->redirect_route) {
+        // $redirectRoute = match ('index') {
+        //     'index' => 'tasks.index',
+        //     'own-list' => 'tasks.own-list',
+        // };
+        // dd($redirectRoute);
+        // dd(gettype($redirectRoute));
+        // $redirectRoute = $request->redirect_route;
+        return RedirectService::redirectWithSessionFlash(['tasks.index', $request->redirect_page], 'status', [
+            'type' => 'success',
+            'title' => '¡¡Éxito!!',
+            'message' => 'Tarea ACTUALIZADA satisfactoriamente.',
+        ]);
+
+        // session()->flash('status', [
+        //     'type' => 'success',
+        //     'title' => '¡¡Éxito!!',
+        //     'message' => 'Tarea ACTUALIZADA satisfactoriamente.',
+        // ]);
+        // // if ($request->redirect_page > 1) {
+        // //     return redirect()->route($request->redirect_route, ['page' => $request->redirect_page]);
+        // // }
+        // // dd($request->redirect_route);
+        // // return redirect()->route($request->redirect_route);
+        // // $route = $request->redirect_route;
+        // if ($request->redirect_route == 'tasks.index') {
+        //     $route = 'tasks.index';
+        // } else {
+        //     $route = 'tasks.own-list';
+        // }
+        // if ($request->redirect_page > 1) {
+        //     return redirect()->route($route, ['page' => $request->redirect_page]);
+        // }
+        // return redirect()->route($route);
+        // // $route = 'tasks.index';
+        // // return redirect()->route($route);
+        // // return redirect()->route('tasks.index');
+        */
+        // ====================================================================================
+        return $this->updateFinal($request, $task, ['tasks.index', $request->redirect_page]);
+    }
+
+    public function updateFromMineList(TaskRequest $request, Task $task): RedirectResponse
+    {
+        return $this->updateFinal($request, $task, ['tasks.own-list', $request->redirect_page]);
+    }
+
+    private function updateFinal($request, Task $task, array $routeParams): RedirectResponse
+    {
+        Gate::authorize('update', $task);
+
+        TaskService::update($task, $request);
+
+        return RedirectService::redirectWithSessionFlash($routeParams, 'status', [
             'type' => 'success',
             'title' => '¡¡Éxito!!',
             'message' => 'Tarea ACTUALIZADA satisfactoriamente.',
         ]);
     }
 
-    public function destroy(Task $task): RedirectResponse
+    public function destroy(Task $task, Request $request): RedirectResponse
+    {
+        return $this->destroyFinal($task, ['tasks.index', $request->redirect_page]);
+    }
+
+    public function destroyFromMineList(Task $task, Request $request): RedirectResponse
+    {
+        return $this->destroyFinal($task, ['tasks.own-list', $request->redirect_page]);
+    }
+
+    private function destroyFinal(Task $task, array $routeParams): RedirectResponse
     {
         Gate::authorize('delete', $task);
 
         // $task->delete();
         TaskService::destroy($task);
 
-        return RedirectService::redirectWithSessionFlash('tasks.index', 'status', [
+        // $paginator = Task::paginate(2, ['id']);
+        $paginator = match ($routeParams[0]) {
+            'tasks.index' => TaskService::paginator(2),
+            'tasks.own-list' => TaskService::paginator(2, auth()->user()),
+        };
+        $redirectPage = $routeParams[1] <= $paginator->lastPage()
+            ? $routeParams[1]
+            : $paginator->lastPage();
+        // dd($paginator, $routeParams[1], $paginator->lastPage());
+        $routeParamsFinal = [$routeParams[0], $redirectPage];
+
+        return RedirectService::redirectWithSessionFlash($routeParamsFinal, 'status', [
             'type' => 'success',
             'title' => '¡¡Éxito!!',
             'message' => 'Tarea ELIMINADA satisfactoriamente.',
         ]);
     }
 
-    public function toggleFromAllList(Task $task): RedirectResponse
+    public function toggleFromAllList(Task $task, Request $request): RedirectResponse
     {
-        return $this->toggle($task, 'tasks.index');
+        return $this->toggle($task, ['tasks.index', $request->redirect_page]);
     }
 
-    public function toggleFromMineList(Task $task): RedirectResponse
+    public function toggleFromMineList(Task $task, Request $request): RedirectResponse
     {
-        return $this->toggle($task, 'tasks.own-list');
+        return $this->toggle($task, ['tasks.own-list', $request->redirect_page]);
     }
 
-    public function toggle(Task $task, string $route): RedirectResponse
+    private function toggle(Task $task, array $routeParams): RedirectResponse
     {
         $taskCompletedState = $task->completed ? 'PENDIENTE' : 'COMPLETADA';
         TaskService::toggle($task);
 
-        return RedirectService::redirectWithSessionFlash($route, 'status', [
+        return RedirectService::redirectWithSessionFlash($routeParams, 'status', [
             'type' => 'success',
             'title' => '¡¡Éxito!!',
             'message' => 'Tarea marcada como ' . $taskCompletedState . ' satisfactoriamente.',

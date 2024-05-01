@@ -86,12 +86,14 @@
                                                     <span class="slider round"></span>
                                                 </label>
                                             </div>
+                                            <input type="hidden" name="redirect_page" value="{{ $tasks->currentPage() }}" />
                                         </form>
 
 
                                         <div class="flex justify-end w-full">
                                             @can('update', $task)
-                                            <a href="{{ route('tasks.edit', $task) }}" class="px-4 py-2 font-bold text-white bg-gray-700 rounded hover:bg-gray-500" title="{{ __('tasks/index.button.edit') }}">
+                                            {{-- <a href="{{ route('tasks.edit', [$task, 'page' => $tasks->currentPage()]) }}" class="px-4 py-2 font-bold text-white bg-gray-700 rounded hover:bg-gray-500" title="{{ __('tasks/index.button.edit') }}"> --}}
+                                            <a href="{{ route('tasks.edit', [$task, 'referer' => 'index-' . $tasks->currentPage()]) }}" class="px-4 py-2 font-bold text-white bg-gray-700 rounded hover:bg-gray-500" title="{{ __('tasks/index.button.edit') }}">
                                                 {{ __('tasks/index.button.edit') }}
                                             </a>
                                             @else
@@ -105,6 +107,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"class="px-4 py-2 font-bold text-white bg-red-700 rounded ms-2 hover:bg-red-500" title="{{ __('tasks/index.button.delete') }}" onclick="return confirm('{{ __('¿En verdad se desea ELIMINAR este registro?') }}')">{{ __('tasks/index.button.delete') }}</button>
+                                                <input type="hidden" name="redirect_page" value="{{ $tasks->currentPage() }}" />
                                             </form>
                                             @else
                                             <p class="px-4 py-2 font-bold text-gray-400 bg-red-700 rounded cursor-default ms-2" title="{{ __('tasks/index.button.delete') }} - {{ __('tasks/index.button.no_available') }}">

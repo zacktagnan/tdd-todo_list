@@ -19,6 +19,14 @@ final class TaskService
         return $user->tasks()->latest()->paginate($itemsPerPage);
     }
 
+    public static function paginator(int $itemsPerPage = 5, User|null $user = null): LengthAwarePaginator
+    {
+        if (is_null($user)) {
+            return Task::paginate($itemsPerPage, ['id']);
+        }
+        return $user->tasks()->paginate($itemsPerPage, ['id']);
+    }
+
     public static function store(User $user, Request $request): void
     {
         $user->tasks()->create($request->except('completed') + [
@@ -28,7 +36,7 @@ final class TaskService
 
     public static function update(Task $task, Request $request): void
     {
-        $task->update($request->except('completed') + [
+        $task->update($request->except(['completed', 'redirect_route', 'redirect_page']) + [
             'completed' => $request->has('completed')
         ]);
     }
