@@ -53,12 +53,17 @@ final class TaskService
         ]);
     }
 
-    public static function getTotalTasks(User|null $user = null): int
-    {
-        if (is_null($user)) {
-            return Task::count();
-        }
+    /**
+     * Ya no es necesario pues, al paginar, se puede obtener el TOTAL del listado
+     * a través del método "total()" del conjunto de registros paginados, por ejemplo:
+     *      $tasks->total()
+     */
+    // public static function getTotalTasks(User|null $user = null): int
+    // {
+    //     if (is_null($user)) {
+    //         return Task::count();
+    //     }
 
-        return $user->tasks()->count();
-    }
+    //     return $user->tasks()->count();
+    // }
 }

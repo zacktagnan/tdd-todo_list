@@ -15,7 +15,7 @@
                             <div class="flex items-center justify-between">
                                 <div class="flex items-end">
                                     <h3 class="text-lg font-medium leading-none">{{ __('tasks/index.list.own_section_label') }}</h3>
-                                    <span class="ml-1 text-xs">({{ $totalTasks }})</span>
+                                    <span class="ml-1 text-xs">({{ $ownTasks->total() }})</span>
                                 </div>
 
                                 @include('tasks.submenu-items')
