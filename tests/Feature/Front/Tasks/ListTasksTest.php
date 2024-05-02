@@ -36,9 +36,12 @@ test('users can render their own tasks list', function () {
 test('users can toggle tasks from index list', function () {
     $user = User::factory()->create();
     $task = $user->tasks()->create([
-        'title' => 'Tarea a Togglear',
-        'description' => 'La Descripción de la Tarea a Togglear',
-        'completed' => false,
+        // 'title' => 'Tarea a Togglear',
+        // 'description' => 'La Descripción de la Tarea a Togglear',
+        // 'completed' => false,
+        'title' => config('constants.TASK_TEST.register.stored.title'),
+        'description' => config('constants.TASK_TEST.register.stored.description'),
+        'completed' => config('constants.TASK_TEST.register.stored.completed'),
     ]);
 
     $response = $this
@@ -46,16 +49,20 @@ test('users can toggle tasks from index list', function () {
         ->put(route('tasks.toggle', $task));
 
     if ($task->completed) {
-        $response->assertSessionHas('status', [
-            'type' => 'success',
-            'title' => '¡¡Éxito!!',
-            'message' => 'Tarea marcada como PENDIENTE satisfactoriamente.',
+        $response->assertSessionHas(config('constants.SESSION_NAME'), [
+            'type' => config('constants.SESSION_TYPE'),
+            'title' => __('tasks/notifications.success.title'),
+            'message' => __('tasks/notifications.toggle_message', [
+                'state' => __('tasks/notifications.pending')
+            ]),
         ]);
     } else {
-        $response->assertSessionHas('status', [
-            'type' => 'success',
-            'title' => '¡¡Éxito!!',
-            'message' => 'Tarea marcada como COMPLETADA satisfactoriamente.',
+        $response->assertSessionHas(config('constants.SESSION_NAME'), [
+            'type' => config('constants.SESSION_TYPE'),
+            'title' => __('tasks/notifications.success.title'),
+            'message' => __('tasks/notifications.toggle_message', [
+                'state' => __('tasks/notifications.completed')
+            ]),
         ]);
     }
 
@@ -73,9 +80,12 @@ test('users can toggle tasks from index list', function () {
 test('users can toggle tasks from own list', function () {
     $user = User::factory()->create();
     $task = $user->tasks()->create([
-        'title' => 'Tarea propia a Togglear',
-        'description' => 'La Descripción de la Tarea propia a Togglear',
-        'completed' => false,
+        // 'title' => 'Tarea propia a Togglear',
+        // 'description' => 'La Descripción de la Tarea propia a Togglear',
+        // 'completed' => false,
+        'title' => config('constants.TASK_TEST.register.stored.title'),
+        'description' => config('constants.TASK_TEST.register.stored.description'),
+        'completed' => config('constants.TASK_TEST.register.stored.completed'),
     ]);
 
     $response = $this
@@ -83,16 +93,20 @@ test('users can toggle tasks from own list', function () {
         ->put(route('tasks.toggle-mine', $task));
 
     if ($task->completed) {
-        $response->assertSessionHas('status', [
-            'type' => 'success',
-            'title' => '¡¡Éxito!!',
-            'message' => 'Tarea marcada como PENDIENTE satisfactoriamente.',
+        $response->assertSessionHas(config('constants.SESSION_NAME'), [
+            'type' => config('constants.SESSION_TYPE'),
+            'title' => __('tasks/notifications.success.title'),
+            'message' => __('tasks/notifications.toggle_message', [
+                'state' => __('tasks/notifications.pending')
+            ]),
         ]);
     } else {
-        $response->assertSessionHas('status', [
-            'type' => 'success',
-            'title' => '¡¡Éxito!!',
-            'message' => 'Tarea marcada como COMPLETADA satisfactoriamente.',
+        $response->assertSessionHas(config('constants.SESSION_NAME'), [
+            'type' => config('constants.SESSION_TYPE'),
+            'title' => __('tasks/notifications.success.title'),
+            'message' => __('tasks/notifications.toggle_message', [
+                'state' => __('tasks/notifications.completed')
+            ]),
         ]);
     }
 

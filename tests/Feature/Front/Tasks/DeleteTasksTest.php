@@ -15,19 +15,27 @@ test('users can delete tasks', function () {
     $timestamp = time();
     $user = User::factory()->create();
     $task = $user->tasks()->create([
-        'title' => 'El Título de la Tarea a eliminar ' . $timestamp,
-        'description' => 'La Descripción de la Tarea a eliminar ' . $timestamp,
-        'completed' => false,
+        // 'title' => 'El Título de la Tarea a eliminar ' . $timestamp,
+        // 'description' => 'La Descripción de la Tarea a eliminar ' . $timestamp,
+        // 'completed' => false,
+        'title' => config('constants.TASK_TEST.register.stored.title'),
+        'description' => config('constants.TASK_TEST.register.stored.description'),
+        'completed' => config('constants.TASK_TEST.register.stored.completed'),
     ]);
 
     $this
         ->actingAs($user)
         ->delete(route('tasks.destroy', $task))
-        ->assertSessionHas('status', [
-            'type' => 'success',
-            'title' => '¡¡Éxito!!',
-            'message' => 'Tarea ELIMINADA satisfactoriamente.',
-        ])
+        ->assertSessionHas(
+            config('constants.SESSION_NAME'),
+            [
+                'type' => config('constants.SESSION_TYPE'),
+                'title' => __('tasks/notifications.success.title'),
+                'message' => __('tasks/notifications.general_message', [
+                    'state' => __('tasks/notifications.deleted')
+                ]),
+            ]
+        )
         ->assertRedirect(route('tasks.index'));
 
     $this->assertDatabaseMissing('tasks', [
@@ -39,19 +47,27 @@ test('users can delete tasks from own list', function () {
     $timestamp = time();
     $user = User::factory()->create();
     $task = $user->tasks()->create([
-        'title' => 'El Título de la Tarea propia a eliminar ' . $timestamp,
-        'description' => 'La Descripción de la Tarea propia a eliminar ' . $timestamp,
-        'completed' => false,
+        // 'title' => 'El Título de la Tarea propia a eliminar ' . $timestamp,
+        // 'description' => 'La Descripción de la Tarea propia a eliminar ' . $timestamp,
+        // 'completed' => false,
+        'title' => config('constants.TASK_TEST.register.stored.title'),
+        'description' => config('constants.TASK_TEST.register.stored.description'),
+        'completed' => config('constants.TASK_TEST.register.stored.completed'),
     ]);
 
     $this
         ->actingAs($user)
         ->delete(route('tasks.destroy-mine', $task))
-        ->assertSessionHas('status', [
-            'type' => 'success',
-            'title' => '¡¡Éxito!!',
-            'message' => 'Tarea ELIMINADA satisfactoriamente.',
-        ])
+        ->assertSessionHas(
+            config('constants.SESSION_NAME'),
+            [
+                'type' => config('constants.SESSION_TYPE'),
+                'title' => __('tasks/notifications.success.title'),
+                'message' => __('tasks/notifications.general_message', [
+                    'state' => __('tasks/notifications.deleted')
+                ]),
+            ]
+        )
         ->assertRedirect(route('tasks.own-list'));
 
     $this->assertDatabaseMissing('tasks', [
@@ -62,8 +78,10 @@ test('users can delete tasks from own list', function () {
 test('users cannot delete a task from another user - only admins', function () {
     $user = User::factory()->create();
     $taskStored = [
-        'title' => 'Tarea posible de eliminar',
-        'description' => 'La Descripción de la Tarea a eliminar',
+        // 'title' => 'Tarea posible de eliminar',
+        // 'description' => 'La Descripción de la Tarea a eliminar',
+        'title' => config('constants.TASK_TEST.register.stored.title'),
+        'description' => config('constants.TASK_TEST.register.stored.description'),
     ];
     $task = $user->tasks()->create([
         'title' => $taskStored['title'],

@@ -16,9 +16,12 @@ test('users can render the edit tasks form', function () {
     $timestamp = time();
     $user = User::factory()->create();
     $task = $user->tasks()->create([
-        'title' => 'El Título de la Tarea ' . $timestamp,
-        'description' => 'La Descripción de la Tarea ' . $timestamp,
-        'completed' => false,
+        // 'title' => 'El Título de la Tarea ' . $timestamp,
+        // 'description' => 'La Descripción de la Tarea ' . $timestamp,
+        // 'completed' => false,
+        'title' => config('constants.TASK_TEST.register.stored.title'),
+        'description' => config('constants.TASK_TEST.register.stored.description'),
+        'completed' => config('constants.TASK_TEST.register.stored.completed'),
     ]);
 
     $this
@@ -34,14 +37,20 @@ test('users can update a task', function () {
     $timestamp = time();
     $user = User::factory()->create();
     $task = $user->tasks()->create([
-        'title' => 'El Título de la Tarea ' . $timestamp,
-        'description' => 'La Descripción de la Tarea ' . $timestamp,
-        'completed' => false,
+        // 'title' => 'El Título de la Tarea ' . $timestamp,
+        // 'description' => 'La Descripción de la Tarea ' . $timestamp,
+        // 'completed' => false,
+        'title' => config('constants.TASK_TEST.register.stored.title'),
+        'description' => config('constants.TASK_TEST.register.stored.description'),
+        'completed' => config('constants.TASK_TEST.register.stored.completed'),
     ]);
     $taskUpdated = [
-        'title' => 'Tarea actualizada ' . $timestamp,
-        'description' => 'Descripción actualizada ' . $timestamp,
-        'completed' => true,
+        // 'title' => 'Tarea actualizada ' . $timestamp,
+        // 'description' => 'Descripción actualizada ' . $timestamp,
+        // 'completed' => true,
+        'title' => config('constants.TASK_TEST.register.updated.title'),
+        'description' => config('constants.TASK_TEST.register.updated.description'),
+        'completed' => config('constants.TASK_TEST.register.updated.completed'),
     ];
 
     $this
@@ -51,10 +60,12 @@ test('users can update a task', function () {
             'description' => $taskUpdated['description'],
             'completed' => $taskUpdated['completed'],
         ])
-        ->assertSessionHas('status', [
-            'type' => 'success',
-            'title' => '¡¡Éxito!!',
-            'message' => 'Tarea ACTUALIZADA satisfactoriamente.',
+        ->assertSessionHas(config('constants.SESSION_NAME'), [
+            'type' => config('constants.SESSION_TYPE'),
+            'title' => __('tasks/notifications.success.title'),
+            'message' => __('tasks/notifications.general_message', [
+                'state' => __('tasks/notifications.updated')
+            ]),
         ])
         ->assertRedirect(route('tasks.index'));
 
@@ -70,14 +81,20 @@ test('validation works on update task', function () {
     $timestamp = time();
     $user = User::factory()->create();
     $task = $user->tasks()->create([
-        'title' => 'El Título de la Tarea ' . $timestamp,
-        'description' => 'La Descripción de la Tarea ' . $timestamp,
-        'completed' => false,
+        // 'title' => 'El Título de la Tarea ' . $timestamp,
+        // 'description' => 'La Descripción de la Tarea ' . $timestamp,
+        // 'completed' => false,
+        'title' => config('constants.TASK_TEST.register.stored.title'),
+        'description' => config('constants.TASK_TEST.register.stored.description'),
+        'completed' => config('constants.TASK_TEST.register.stored.completed'),
     ]);
     $taskUpdated = [
-        'title' => 'Tarea actualizada ' . $timestamp,
-        'description' => 'Descripción actualizada ' . $timestamp,
-        'completed' => true,
+        // 'title' => 'Tarea actualizada ' . $timestamp,
+        // 'description' => 'Descripción actualizada ' . $timestamp,
+        // 'completed' => true,
+        'title' => config('constants.TASK_TEST.register.updated.title'),
+        'description' => config('constants.TASK_TEST.register.updated.description'),
+        'completed' => config('constants.TASK_TEST.register.updated.completed'),
     ];
 
     $this
@@ -93,17 +110,22 @@ test('validation works on update task', function () {
 test('users cannot update a task from another user - only admins', function () {
     $user = User::factory()->create();
     $taskStored = [
-        'title' => 'Tarea posible de actualizar',
-        'description' => 'La Descripción de la Tarea a actualizar',
+        // 'title' => 'Tarea posible de actualizar',
+        // 'description' => 'La Descripción de la Tarea a actualizar',
+        'title' => config('constants.TASK_TEST.register.stored.title'),
+        'description' => config('constants.TASK_TEST.register.stored.description'),
     ];
     $task = $user->tasks()->create([
         'title' => $taskStored['title'],
         'description' => $taskStored['description'],
     ]);
     $taskUpdated = [
-        'title' => 'Tarea actualizada por otro',
-        'description' => 'Descripción actualizada por otro',
-        'completed' => true,
+        // 'title' => 'Tarea actualizada por otro',
+        // 'description' => 'Descripción actualizada por otro',
+        // 'completed' => true,
+        'title' => config('constants.TASK_TEST.register.updated.title'),
+        'description' => config('constants.TASK_TEST.register.updated.description'),
+        'completed' => config('constants.TASK_TEST.register.updated.completed'),
     ];
     $anotherUser = User::factory()->create();
 

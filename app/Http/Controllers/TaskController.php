@@ -95,11 +95,17 @@ class TaskController extends Controller
         // ]);
         // return redirect()->route('tasks.index');
         // ----------------------------------------------------------------
-        return RedirectService::redirectWithSessionFlash(['tasks.index', 1], 'status', [
-            'type' => 'success',
-            'title' => '¡¡Éxito!!',
-            'message' => 'Tarea CREADA satisfactoriamente.',
-        ]);
+        return RedirectService::redirectWithSessionFlash(
+            ['tasks.index', 1],
+            config('constants.SESSION_NAME'),
+            [
+                'type' => config('constants.SESSION_TYPE'),
+                'title' => __('tasks/notifications.success.title'),
+                'message' => __('tasks/notifications.general_message', [
+                    'state' => __('tasks/notifications.created')
+                ]),
+            ]
+        );
     }
 
     public function edit(Task $task, string $referer): View
@@ -221,11 +227,17 @@ class TaskController extends Controller
 
         TaskService::update($task, $request);
 
-        return RedirectService::redirectWithSessionFlash($routeParams, 'status', [
-            'type' => 'success',
-            'title' => '¡¡Éxito!!',
-            'message' => 'Tarea ACTUALIZADA satisfactoriamente.',
-        ]);
+        return RedirectService::redirectWithSessionFlash(
+            $routeParams,
+            config('constants.SESSION_NAME'),
+            [
+                'type' => config('constants.SESSION_TYPE'),
+                'title' => __('tasks/notifications.success.title'),
+                'message' => __('tasks/notifications.general_message', [
+                    'state' => __('tasks/notifications.updated')
+                ]),
+            ]
+        );
     }
 
     public function destroy(Task $task, Request $request): RedirectResponse
@@ -256,11 +268,17 @@ class TaskController extends Controller
         // dd($paginator, $routeParams[1], $paginator->lastPage());
         $routeParamsFinal = [$routeParams[0], $redirectPage];
 
-        return RedirectService::redirectWithSessionFlash($routeParamsFinal, 'status', [
-            'type' => 'success',
-            'title' => '¡¡Éxito!!',
-            'message' => 'Tarea ELIMINADA satisfactoriamente.',
-        ]);
+        return RedirectService::redirectWithSessionFlash(
+            $routeParamsFinal,
+            config('constants.SESSION_NAME'),
+            [
+                'type' => config('constants.SESSION_TYPE'),
+                'title' => __('tasks/notifications.success.title'),
+                'message' => __('tasks/notifications.general_message', [
+                    'state' => __('tasks/notifications.deleted')
+                ]),
+            ]
+        );
     }
 
     public function toggleFromAllList(Task $task, Request $request): RedirectResponse
@@ -275,13 +293,23 @@ class TaskController extends Controller
 
     private function toggle(Task $task, array $routeParams): RedirectResponse
     {
-        $taskCompletedState = $task->completed ? 'PENDIENTE' : 'COMPLETADA';
+        $message = $task->completed
+            ? __('tasks/notifications.toggle_message', [
+                'state' => __('tasks/notifications.pending')
+            ])
+            : __('tasks/notifications.toggle_message', [
+                'state' => __('tasks/notifications.completed')
+            ]);
         TaskService::toggle($task);
 
-        return RedirectService::redirectWithSessionFlash($routeParams, 'status', [
-            'type' => 'success',
-            'title' => '¡¡Éxito!!',
-            'message' => 'Tarea marcada como ' . $taskCompletedState . ' satisfactoriamente.',
-        ]);
+        return RedirectService::redirectWithSessionFlash(
+            $routeParams,
+            config('constants.SESSION_NAME'),
+            [
+                'type' => config('constants.SESSION_TYPE'),
+                'title' => __('tasks/notifications.success.title'),
+                'message' => $message,
+            ]
+        );
     }
 }

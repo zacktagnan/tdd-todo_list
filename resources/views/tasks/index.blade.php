@@ -29,7 +29,7 @@
                         </div>
 
                         <div class="px-4">
-                            @if (session()->has('status'))
+                            @if (session()->has(config('constants.SESSION_NAME')))
                                 {{-- <x-flash-messages :sessionType="'success'" :color="'green'" :title="'¡¡Éxito!!'" /> --}}
                                 <x-flash-messages />
                             @endif

@@ -27,8 +27,10 @@ test('users can render the create tasks form', function () {
 test('users can create tasks', function () {
     $timestamp = time();
     $taskStored = [
-        'title' => 'Tarea ' . $timestamp,
-        'description' => 'Descripción ' . $timestamp,
+        // 'title' => 'Tarea ' . $timestamp,
+        // 'description' => 'Descripción ' . $timestamp,
+        'title' => config('constants.TASK_TEST.register.stored.title'),
+        'description' => config('constants.TASK_TEST.register.stored.description'),
     ];
 
     $this
@@ -38,11 +40,16 @@ test('users can create tasks', function () {
             'description' => $taskStored['description'],
         ])
         // ->assertSessionHas('status', 'Tarea CREADA satisfactoriamente.')
-        ->assertSessionHas('status', [
-            'type' => 'success',
-            'title' => '¡¡Éxito!!',
-            'message' => 'Tarea CREADA satisfactoriamente.',
-        ])
+        ->assertSessionHas(
+            config('constants.SESSION_NAME'),
+            [
+                'type' => config('constants.SESSION_TYPE'),
+                'title' => __('tasks/notifications.success.title'),
+                'message' => __('tasks/notifications.general_message', [
+                    'state' => __('tasks/notifications.created')
+                ]),
+            ]
+        )
         ->assertRedirect(route('tasks.index'));
 
     $this->assertDatabaseHas('tasks', [
