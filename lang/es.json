@@ -42,5 +42,8 @@
 
     "You're logged in!": "¡Estás autenticado!",
     "Dashboard": "Panel de Usuario",
-    "Profile": "Perfil"
+    "Profile": "Perfil",
+
+    "Go to the first page": "Ir a la primera página",
+    "Go to the last page": "Ir a la última página"
 }

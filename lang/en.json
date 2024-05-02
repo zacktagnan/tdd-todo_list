@@ -42,5 +42,8 @@
 
     "You're logged in!": "You're logged in!",
     "Dashboard": "Dashboard",
-    "Profile": "Profile"
+    "Profile": "Profile",
+
+    "Go to the first page": "Go to the first page",
+    "Go to the last page": "Go to the last page"
 }
