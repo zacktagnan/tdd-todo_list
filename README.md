@@ -8,6 +8,16 @@ Tratando de ir implementando un proyecto básico para la gestión de un listado 
 
 El proyecto de *Laravel* se creará con el comando de CuRL, en este caso, a través de la terminal de WSL2 de Windows, para poder gestionarlo a través de **[Laravel Sail](https://laravel.com/docs/11.x/sail)** durante el desarrollo local.
 
+<p align="center"><img src="./_assets/img/tdd-todo-list-01.png" width="400" alt="tdd-todo-list-01"></p>
+
+<p align="center"><img src="./_assets/img/tdd-todo-list-02.png" width="400" alt="tdd-todo-list-02"></p>
+
+<p align="center"><img src="./_assets/img/tdd-todo-list-03.png" width="400" alt="tdd-todo-list-03"></p>
+
+<p align="center"><img src="./_assets/img/tdd-todo-list-04.png" width="400" alt="tdd-todo-list-04"></p>
+
+<p align="center"><img src="./_assets/img/tdd-todo-list-05.png" width="400" alt="tdd-todo-list-05"></p>
+
 ## Xdebug en el Proyecto
 
 Al menos, desde las últimas versiones de *Laravel Sail*, **[Xdebug](https://xdebug.org/)** ya se encuentra preinstalado cuando se crea el proyecto tal y como se indicó anteriormente.<br>
